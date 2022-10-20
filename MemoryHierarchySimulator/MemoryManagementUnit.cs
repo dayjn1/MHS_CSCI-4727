@@ -14,6 +14,13 @@ namespace MemoryHierarchySimulator
         {
             DisplayConfigSettings();
 
+            //Cache example
+            DataCache dc = new DataCache();
+
+            dc.findCacheVariables(123);
+            CacheHit ch = dc.findInstructionInCache();
+            dc.updateCacheTag();
+
         }
 
 
