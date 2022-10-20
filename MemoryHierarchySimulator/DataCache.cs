@@ -49,18 +49,20 @@ namespace MemoryHierarchySimulator
 			//Finds how many bits will be allowed in the offset
 			offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
 			//Finds how many bits will be in the index
-			indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+			indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
+			
+			association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
 			indexBitAmount = (int)Math.Log(indexSize, 2);
 
-			cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Line size"));
+			cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
 
 			numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
 			//This should be configurable in the future to allow 2/4 way association
 			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
 			indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
 
-			l1Cache = new byte[indexSize][];
-			tagIndexCache = new int[indexSize];
+			l1Cache = new byte[cacheLines][];
+			tagIndexCache = new int[cacheLines];
 			//Setting up the cache to hold memory
 			for (int x = 0; x < l1Cache.Length; x++)
 			{
@@ -127,8 +129,8 @@ namespace MemoryHierarchySimulator
 		public CacheHit findInstructionInCache()
 		{
 			//finds the offset for the types of association
-			int assocOffset = cacheLines / association;
-			for (int x = index; x < l1Cache.Length; x = x + assocOffset)
+			
+			for (int x = index; x < l1Cache.Length; x = x + indexSize)
 			{
 				if (tagIndexCache[x] == -1)
 				{
