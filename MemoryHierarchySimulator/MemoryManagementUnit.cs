@@ -15,11 +15,21 @@ namespace MemoryHierarchySimulator
             DisplayConfigSettings();
 
             //Cache example
-            DataCache dc = new DataCache();
-
-            dc.findCacheVariables(123);
+            DataCache dc = new DataCache("L1");
+            DataCache l2 = new DataCache("L2");
+            
+            //132 is equivalent to 84 in Hex, the first address in the spec
+            dc.findCacheVariables(132);
             CacheHit ch = dc.findInstructionInCache();
             dc.updateCacheTag();
+
+            l2.findCacheVariables(132);
+            ch = l2.findInstructionInCache();
+            l2.updateCacheTag();
+
+            l2.findCacheVariables(132);
+            ch = l2.findInstructionInCache();
+            l2.updateCacheTag();
 
         }
 
