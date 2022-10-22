@@ -38,7 +38,7 @@ namespace MemoryHierarchySimulator
 	    * Date created: 4/19/21 <br>
 	    * @author Samuel Reynolds
 	    */
-		public DataCache()
+		public DataCache(string cacheType)
 		{
 			tag = 0;
 			index = 0;
@@ -46,15 +46,32 @@ namespace MemoryHierarchySimulator
 			//association = config.associativity;
 
 			rand = new Random();
-			//Finds how many bits will be allowed in the offset
-			offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
-			//Finds how many bits will be in the index
-			indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
+			switch(cacheType)
+            {
+				case "L1":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
 			
-			association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
-			indexBitAmount = (int)Math.Log(indexSize, 2);
+					association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
 
-			cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
+					cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
+					break;
+				case "L2":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("L2 Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("L2 Number of sets"));
+
+					association = int.Parse(ConfigurationManager.AppSettings.Get("L2 Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
+
+					cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("L2 Number of sets")) * association;
+					break;
+            }
+			
 
 			numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
 			//This should be configurable in the future to allow 2/4 way association
