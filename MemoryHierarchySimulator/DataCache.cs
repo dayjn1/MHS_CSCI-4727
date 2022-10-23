@@ -47,13 +47,12 @@ namespace MemoryHierarchySimulator
 
             rand = new Random();
             //Finds how many bits will be allowed in the offset
-            offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
+            offsetBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Offset Bits"));
             //Finds how many bits will be in the index
-            indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
+            indexBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Index Bits"));
 
             association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
-            indexBitAmount = (int)Math.Log(indexSize, 2);
-
+            
             cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
 
             numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
