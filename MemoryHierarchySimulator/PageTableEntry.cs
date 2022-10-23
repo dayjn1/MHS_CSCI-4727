@@ -8,16 +8,21 @@ namespace MemoryHierarchySimulator
 {
     public class PageTableEntry
     {
-        int PFN;                    // page frame number
-        int ValidBit;               // is translation in PTE valid
-        int ProtectionBits;         // read, write, etc
-        int PresentBit;             // present - 1, absent - 0
-        int DirtyBit;               // page modified since load
-        int AccessedBit;            // set to 1 when page is accessed
+        public int PFN;                     // page frame number
+        public bool ValidBit;               // is translation in PTE valid
+        public int ProtectionBits;          // read, write, etc
+        public bool PresentBit;             // present - 1, absent - 0
+        public bool DirtyBit;               // page modified since load
+        public bool AccessedBit;            // set to 1 when page is accessed
 
         public PageTableEntry()
         {
-
+            this.PFN = -1;
+            this.ValidBit = false;
+            this.ProtectionBits = 0;
+            this.PresentBit = false;
+            this.DirtyBit = false;
+            this.AccessedBit = false;
         }
     }
 }

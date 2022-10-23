@@ -20,7 +20,19 @@ namespace MemoryHierarchySimulator
         {
             PT = new PageTableEntry[NumVirtPages];
 
-            // need to figure out conversion of VPN to PFN
+            for(int i = 0; i < PT.Length; i++)  // create all pages, setting each to invalid
+            {
+                PT[i] = new PageTableEntry();
+            }
+            
+        }
+
+        public int CheckVPN(int VPN)
+        {
+            if (PT[VPN].PFN != -1)
+                return PT[VPN].PFN;
+            else
+                return -1;          // signal that VPN does not map to a frame, load data into frame using LRU replacement alg
         }
 
 
