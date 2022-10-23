@@ -30,7 +30,7 @@ namespace MemoryHierarchySimulator
 		public int offsetMask;
 		public int indexMask;
 
-		/**
+        /**
 	    * Method Name: DataCache <br>
 	    * Method Purpose: Class constructor
 	    * 
@@ -38,47 +38,46 @@ namespace MemoryHierarchySimulator
 	    * Date created: 4/19/21 <br>
 	    * @author Samuel Reynolds
 	    */
-		public DataCache()
-		{
-			tag = 0;
-			index = 0;
-			offset = 0;
-			//association = config.associativity;
+        public DataCache()
+        {
+            tag = 0;
+            index = 0;
+            offset = 0;
+            //association = config.associativity;
 
-			rand = new Random();
-			//Finds how many bits will be allowed in the offset
-			offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
-			//Finds how many bits will be in the index
-			indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
-			
-			association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
-			indexBitAmount = (int)Math.Log(indexSize, 2);
+            rand = new Random();
+            //Finds how many bits will be allowed in the offset
+            offsetBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Offset Bits"));
+            //Finds how many bits will be in the index
+            indexBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Index Bits"));
 
-			cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
+            association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+            
+            cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
 
-			numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
-			//This should be configurable in the future to allow 2/4 way association
-			offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
-			indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
+            numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
+            //This should be configurable in the future to allow 2/4 way association
+            offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
+            indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
 
-			l1Cache = new byte[cacheLines][];
-			tagIndexCache = new int[cacheLines];
-			//Setting up the cache to hold memory
-			for (int x = 0; x < l1Cache.Length; x++)
-			{
-				tagIndexCache[x] = -1;
-			}
-		}
-		
-		/// <summary>Updates the cache.</summary>
-		/// <param name="address">The address.</param>
-		/// <param name="memory">The main memory.</param>
-		///   <para>
-		/// The cache.
-		/// </para>
-		/// </param>
-		/// <exception cref="System.NotImplementedException"></exception>
-		public void updateCacheTag()
+            l1Cache = new byte[cacheLines][];
+            tagIndexCache = new int[cacheLines];
+            //Setting up the cache to hold memory
+            for (int x = 0; x < l1Cache.Length; x++)
+            {
+                tagIndexCache[x] = -1;
+            }
+        }
+
+        /// <summary>Updates the cache.</summary>
+        /// <param name="address">The address.</param>
+        /// <param name="memory">The main memory.</param>
+        ///   <para>
+        /// The cache.
+        /// </para>
+        /// </param>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public void updateCacheTag()
 		{
 			/*	Can be reused for the TLB
 			//Adds new byte of memory into the cache
