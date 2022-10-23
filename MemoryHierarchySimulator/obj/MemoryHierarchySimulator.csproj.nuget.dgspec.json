@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
+    "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
+    "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "projectUniqueName": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
         "projectName": "MemoryHierarchySimulator",
-        "projectPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
-        "packagesPath": "C:\\Users\\janin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
+        "projectPath": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "packagesPath": "C:\\Users\\samre\\.nuget\\packages\\",
+        "outputPath": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\janin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\samre\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,10 +40,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.IdentityModel.Protocols": {
-              "target": "Package",
-              "version": "[6.24.0, )"
-            },
             "System.Configuration.ConfigurationManager": {
               "target": "Package",
               "version": "[6.0.1, )"
@@ -55,7 +51,8 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -64,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

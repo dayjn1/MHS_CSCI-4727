@@ -174,6 +174,7 @@ namespace MemoryHierarchySimulator
                 Console.WriteLine("File does not exist!");
                 return null;
             }
+            
         }
 
     }
