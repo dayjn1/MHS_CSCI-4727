@@ -10,18 +10,20 @@ namespace MemoryHierarchySimulator
 {
     internal class DTLB
     {
-        public byte[][] TLB;
+        public int[] TLB;
         public int[] tlbIndex;
         public int numOfLines, dtlbHits, dtlbMisses, tlbTag, tlbIndexNum;
         public int tag, index, offset;
         private int memoryKicked = 0;
-
+        public int indexMask;
+        private Random rand;
         //configuration
-        private int numOfSets { get; set; }
+        private int indexSize { get; set; }
         private int setSize { get; set; }
         private int numOfBitsForIndex { get; set; }
 
         public int indexBitAmount { get; set; }
+
 
         /**
 	    * Method Name: DTLB <br>
@@ -31,48 +33,100 @@ namespace MemoryHierarchySimulator
 	    * Date created: 10/15/22 <br>
 	    * @author Nick Farmer 
 	    */
-        public DTLB(byte virtAddress)
+        public DTLB()
         {
+            rand = new Random();
             tag = 0;
             index = 0;
-            offset = 0;
 
-            numOfSets = int.Parse(ConfigurationManager.AppSettings.Get("TLB Number of sets"));
+            indexSize = int.Parse(ConfigurationManager.AppSettings.Get("TLB Number of sets"));
 
             setSize = int.Parse(ConfigurationManager.AppSettings.Get("TLB Set size"));
-            indexBitAmount = (int)Math.Log(numOfSets, 2);
-            numOfLines = numOfSets * setSize;
 
-            TLB = new byte[numOfLines][];
+            indexBitAmount = (int)Math.Log(indexSize, 2);
+
+            numOfLines = indexSize * setSize;
+            indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
+
+
+            TLB = new int[numOfLines];
             tlbIndex = new int[numOfLines];
+            for (int x = 0; x < TLB.Length; x++)
+            {
+                tlbIndex[x] = -1;
+            }
+
+   
 
 
 
         }
-        public void updateCacheTag()
+        public void updateTlbTag(int physicalAddress)
         {
-            /*	Can be reused for the TLB
-			//Adds new byte of memory into the cache
-			byte[] mem = new byte[numberOfBytes];
-
-			for (int x = 0; x < numberOfBytes; x++)
-			{
-				mem[x] = (byte)memory.MainMemory[address + x];
-			}
+            	//Can be reused for the TL
 			
-			l1Cache[index + indexSize * memoryKicked] = mem;
-			*/
-            tlbIndex[index + numOfSets * memoryKicked] = tag;
+            TLB[index + indexSize * memoryKicked] = physicalAddress;
+			
+            tlbIndex[index + indexSize * memoryKicked] = tag;
         }
 
         public TlbHit findInTlb()
         {
-            return 0;
+            for (int x = index; x < TLB.Length; x = x + indexSize)
+            {
+                if (tlbIndex[x] == -1)
+                {
+                    index = x;
+                    memoryKicked = 0;
+                    return TlbHit.MISSED;
+                }
+                else if (tlbIndex[x] != tag)
+                {
+
+                }
+                else
+                {
+                    index = x;
+                    memoryKicked = 0;
+                    return TlbHit.HIT;
+                }
+            }
+            findRandomOffset();
+            return TlbHit.CONF;
+
+
+        }
+
+        public void findTLBVariables(int inst)
+        {
+            int address = inst;
+            index = address & indexMask;
+            address = address >> indexBitAmount;
+            tag = address;
         }
 
         public void clearCache()
         {
-            
+            for (int x = 0; x < TLB.Length; x++)
+            {
+                TLB[x] = -1;
+                tlbIndex[x] = 0;
+            }
+            memoryKicked = 0;
+        }
+
+        public void findRandomOffset()
+        {
+            switch (numOfLines)
+            {
+                case 1:
+                    memoryKicked = 0;
+                    break;
+                case 2:
+                case 4:
+                    memoryKicked = rand.Next(numOfLines);
+                    break;
+            }
         }
     }   
 

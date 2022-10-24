@@ -16,10 +16,16 @@ namespace MemoryHierarchySimulator
 
             //Cache example
             DataCache dc = new DataCache();
+            DTLB tlb = new DTLB();
+
 
             dc.findCacheVariables(123);
             CacheHit ch = dc.findInstructionInCache();
             dc.updateCacheTag();
+
+            tlb.findTLBVariables(12);
+            TlbHit t = tlb.findInTlb();
+            
 
         }
 
