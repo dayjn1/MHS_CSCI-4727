@@ -1,16 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "upGHXTv+pzipj3eMDupJVgXqGne1ZXNjgNEZ2I7+m/GIeAJ0jne/G8/4ef4m6Td0215eEPfHJq3flLcVM1pjRQ==",
+  "dgSpecHash": "xYy+5BBDhvZq9NmuBlB/eCcomVJVmU9Es7viTfDbI/uH08X4lhc+ZwCn2Vk4SwuR8JTp0E6/aMsTWxKcr6DRBg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+  "projectFilePath": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\janin\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.security.accesscontrol\\6.0.0\\system.security.accesscontrol.6.0.0.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.security.cryptography.protecteddata\\6.0.0\\system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.security.permissions\\6.0.0\\system.security.permissions.6.0.0.nupkg.sha512",
-    "C:\\Users\\janin\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
+    "C:\\Users\\samre\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.1\\system.configuration.configurationmanager.6.0.1.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.security.accesscontrol\\6.0.0\\system.security.accesscontrol.6.0.0.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.security.cryptography.protecteddata\\6.0.0\\system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.security.permissions\\6.0.0\\system.security.permissions.6.0.0.nupkg.sha512",
+    "C:\\Users\\samre\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
   "logs": []
 }
