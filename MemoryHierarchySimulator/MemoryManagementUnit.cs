@@ -24,6 +24,8 @@ namespace MemoryHierarchySimulator
             string[] addressLines;
             string[] address;
             DataCache dc = new DataCache();
+            DTLB tlb = new DTLB();
+
 
             //int that will hold the addresses int
             int virtAddress;
@@ -46,6 +48,10 @@ namespace MemoryHierarchySimulator
 
             CacheHit ch = dc.findInstructionInCache();
             dc.updateCacheTag();
+
+            tlb.findTLBVariables(12);
+            TlbHit t = tlb.findInTlb();
+            
 
         }
 
