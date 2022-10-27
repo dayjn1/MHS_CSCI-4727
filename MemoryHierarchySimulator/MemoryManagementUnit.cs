@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Drawing;
+using Microsoft.IdentityModel.Protocols;
 
 namespace MemoryHierarchySimulator
 {
