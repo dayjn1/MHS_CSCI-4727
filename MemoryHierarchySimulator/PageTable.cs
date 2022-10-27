@@ -15,10 +15,14 @@ namespace MemoryHierarchySimulator
     public class PageTable
     {
         PageTableEntry[] PT;
+        FrameTable FT;
+        int Hits = 0;
+        int Misses = 0;
 
         public PageTable(int NumVirtPages, int NumPhysPages, int PageSize)
         {
             PT = new PageTableEntry[NumVirtPages];
+            FT = new FrameTable(NumPhysPages);
 
             for(int i = 0; i < PT.Length; i++)  // create all pages, setting each to invalid
             {
@@ -27,14 +31,47 @@ namespace MemoryHierarchySimulator
             
         }
 
-        public int CheckVPN(int VPN)
+        public void ProcessMemoryReference(string Reference)
         {
-            if (PT[VPN].PFN != -1)
-                return PT[VPN].PFN;
-            else
-                return -1;          // signal that VPN does not map to a frame, load data into frame using LRU replacement alg
+            string AccessType = Reference.Substring(0, 1);
         }
 
+        public PageTableEntry PassToTLB()
+        {
+
+        }
+
+        public int GetPFN(int VPN)
+        {
+            if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
+            {
+                FT.ReAdjustFrameTable(PT[VPN].PFN);
+                Hits++;
+                return PT[VPN].PFN;
+            }
+            else
+            {
+                Misses++;
+                PT[VPN].PFN = FT.GetLRU();
+                PT[VPN].ValidBit = true;
+
+                InvalidateEntries(PT[VPN].PFN);
+
+                return PT[VPN].PFN;
+            }
+                
+        }
+
+        public void InvalidateEntries(int PFN)
+        {
+            foreach(var entry in PT)
+            {
+                if(entry.PFN == PFN)
+                {
+                    entry.ValidBit = false;
+                }
+            }
+        }
 
     }
 }

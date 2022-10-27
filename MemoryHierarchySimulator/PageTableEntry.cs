@@ -11,18 +11,14 @@ namespace MemoryHierarchySimulator
         public int PFN;                     // page frame number
         public bool ValidBit;               // is translation in PTE valid
         public int ProtectionBits;          // read, write, etc
-        public bool PresentBit;             // present - 1, absent - 0
         public bool DirtyBit;               // page modified since load
-        public bool AccessedBit;            // set to 1 when page is accessed
 
         public PageTableEntry()
         {
             this.PFN = -1;
             this.ValidBit = false;
             this.ProtectionBits = 0;
-            this.PresentBit = false;
             this.DirtyBit = false;
-            this.AccessedBit = false;
         }
     }
 }
