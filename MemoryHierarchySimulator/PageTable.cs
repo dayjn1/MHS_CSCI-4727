@@ -36,10 +36,10 @@ namespace MemoryHierarchySimulator
             string AccessType = Reference.Substring(0, 1);
         }
 
-        public PageTableEntry PassToTLB()
-        {
+        //public PageTableEntry PassToTLB()
+        //{
 
-        }
+        //}
 
         public int GetPFN(int VPN)
         {
