@@ -42,12 +42,14 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 virtAddress = Convert.ToInt32(address[1], 16);
-                dc.findCacheVariables(virtAddress);
+                
+
+                dc.updateWriteCache(132);
+                dc.updateWriteCache(338);
             }
             //Cache example
 
-            CacheHit ch = dc.findInstructionInCache();
-            dc.updateCacheTag();
+            
 
             tlb.findTLBVariables(12);
             TlbHit t = tlb.findInTlb();

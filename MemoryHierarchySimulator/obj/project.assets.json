@@ -378,19 +378,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\samre\\.nuget\\packages\\": {}
+    "C:\\Users\\cocar\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+      "projectUniqueName": "C:\\Users\\cocar\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
       "projectName": "MemoryHierarchySimulator",
-      "projectPath": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
-      "packagesPath": "C:\\Users\\samre\\.nuget\\packages\\",
-      "outputPath": "D:\\ETSU\\Fall 2022\\OS\\Projects\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
+      "projectPath": "C:\\Users\\cocar\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+      "packagesPath": "C:\\Users\\cocar\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\cocar\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\samre\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cocar\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -437,7 +437,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
