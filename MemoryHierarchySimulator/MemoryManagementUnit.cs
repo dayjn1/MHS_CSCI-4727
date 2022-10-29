@@ -43,19 +43,26 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 virtAddress = Convert.ToInt32(address[1], 16);
-                
 
+                //L2 Cache example
+                dc.updateWriteCache(132);
                 dc.updateWriteCache(132);
                 dc.updateWriteCache(388);
 
                 l2.updateWriteCache(132);
+                l2.updateWriteCache(132);
                 l2.updateWriteCache(388);
                 l2.updateWriteCache(900);
                 l2.updateWriteCache(644);
-                l2.updateWriteCache(132);
-                l2.updateWriteCache(1412);
+                if(l2.updateWriteCache(1412) == CacheHit.CONF)
+                {
+                    if(l2.dirtyBits[l2.lastIndex])
+                    {
+
+                    }
+                }
+
             }
-            //Cache example
 
             
 

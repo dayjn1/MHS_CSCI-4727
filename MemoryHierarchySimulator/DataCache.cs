@@ -23,7 +23,7 @@ namespace MemoryHierarchySimulator
 		public int tag, index, offset, cacheLines, address;
 
 		public int lastAddress { get; set; }
-
+		public int lastIndex { get; set; }
 
 		//Allows for configuration
 		public int offsetBitAmount { get; set; }
@@ -105,21 +105,8 @@ namespace MemoryHierarchySimulator
         /// <exception cref="System.NotImplementedException"></exception>
         public void updateCacheTag()
 		{
-			/*	Can be reused for the TLB
-			//Adds new byte of memory into the cache
-			byte[] mem = new byte[numberOfBytes];
-
-			for (int x = 0; x < numberOfBytes; x++)
-			{
-				mem[x] = (byte)memory.MainMemory[address + x];
-			}
-			
-			l1Cache[index + indexSize * memoryKicked] = mem;
-			*/
-
 			tagIndexCache[index + indexSize * memoryKicked] = tag;
 			lru[index % indexSize].ComputeAddress(address);
-
 		}
 
 
@@ -129,11 +116,25 @@ namespace MemoryHierarchySimulator
 		{
 			findCacheVariables(addressUp);
 			CacheHit ch = findInstructionInCache();
+			if (ch == CacheHit.HIT)
+			{
+				dirtyBits[index] = true;
+			}
 			updateCacheTag();
 
 			return ch;
 		}
 
+		/// <summary>Updates the cache with read instructions.</summary>
+		/// <param name="result">The result.</param>
+		public CacheHit updateReadCache(int addressUp)
+		{
+			findCacheVariables(addressUp);
+			CacheHit ch = findInstructionInCache();
+			updateCacheTag();
+
+			return ch;
+		}
 		/// <summary>
 		///   <para>
 		/// Finds the cache variables in order to check if the address is in the cache.
@@ -175,7 +176,6 @@ namespace MemoryHierarchySimulator
 				{
 					index = x;
 					memoryKicked = 0;
-					dirtyBits[x] = true;
 					lru[index % indexSize].ComputeAddress(address);
 					return CacheHit.HIT;
 				}
@@ -226,6 +226,7 @@ namespace MemoryHierarchySimulator
 					if (tagIndexCache[index + indexSize * x] == lastTag)
 					{
 						memoryKicked = x;
+						lastIndex = index + indexSize * x;
 					}
 				}
 			}
