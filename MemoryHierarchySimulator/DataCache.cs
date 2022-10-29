@@ -43,7 +43,7 @@ namespace MemoryHierarchySimulator
 	    * Date created: 4/19/21 <br>
 	    * @author Samuel Reynolds
 	    */
-        public DataCache()
+        public DataCache(string cacheType)
         {
             tag = 0;
             index = 0;
@@ -51,16 +51,29 @@ namespace MemoryHierarchySimulator
             //association = config.associativity;
 
             rand = new Random();
-            //Finds how many bits will be allowed in the offset
-            offsetBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Offset Bits"));
-            //Finds how many bits will be in the index
-            indexBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Index Bits"));
+			switch (cacheType)
+			{
+				case "L1":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
 
-            association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+					association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
+					break;
+				case "L2":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("L2 Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("L2 Number of sets"));
 
-            indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
-            
-            cacheLines =  indexSize * association;
+					association = int.Parse(ConfigurationManager.AppSettings.Get("L2 Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
+					break;
+			}
+
+			cacheLines =  indexSize * association;
 
             numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
             //This should be configurable in the future to allow 2/4 way association
@@ -103,7 +116,8 @@ namespace MemoryHierarchySimulator
 			
 			l1Cache[index + indexSize * memoryKicked] = mem;
 			*/
-			tagIndexCache[(index % indexSize) + indexSize * memoryKicked] = tag;
+
+			tagIndexCache[index + indexSize * memoryKicked] = tag;
 			lru[index % indexSize].ComputeAddress(address);
 
 		}
