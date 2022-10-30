@@ -82,3 +82,31 @@ D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\n
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.pdb
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.genruntimeconfig.cache
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\ref\MemoryHierarchySimulator.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.exe
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.dll.config
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.deps.json
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.runtimeconfig.json
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\MemoryHierarchySimulator.pdb
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\System.Drawing.Common.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\System.Security.Permissions.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\System.Windows.Extensions.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.csproj.AssemblyReference.cache
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.AssemblyInfoInputs.cache
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.AssemblyInfo.cs
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.csproj.CoreCompileInputs.cache
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.csproj.CopyComplete
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\refint\MemoryHierarchySimulator.dll
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.pdb
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.genruntimeconfig.cache
+C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\ref\MemoryHierarchySimulator.dll

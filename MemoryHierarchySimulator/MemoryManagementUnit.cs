@@ -23,7 +23,8 @@ namespace MemoryHierarchySimulator
             //Will hold the addresses from the inputted files
             string[] addressLines;
             string[] address;
-            DataCache dc = new DataCache();
+            DataCache dc = new DataCache("L1");
+            DataCache l2 = new DataCache("L2");
             DTLB tlb = new DTLB();
 
 
@@ -42,12 +43,28 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 virtAddress = Convert.ToInt32(address[1], 16);
-                dc.findCacheVariables(virtAddress);
-            }
-            //Cache example
 
-            CacheHit ch = dc.findInstructionInCache();
-            dc.updateCacheTag();
+                //L2 Cache example
+                dc.updateWriteCache(132);
+                dc.updateWriteCache(132);
+                dc.updateWriteCache(388);
+
+                l2.updateWriteCache(132);
+                l2.updateWriteCache(132);
+                l2.updateWriteCache(388);
+                l2.updateWriteCache(900);
+                l2.updateWriteCache(644);
+                if(l2.updateWriteCache(1412) == CacheHit.CONF)
+                {
+                    if(l2.dirtyBits[l2.lastIndex])
+                    {
+
+                    }
+                }
+
+            }
+
+            
 
             tlb.findTLBVariables(12);
             TlbHit t = tlb.findInTlb();
