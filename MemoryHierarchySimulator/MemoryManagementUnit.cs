@@ -40,19 +40,19 @@ namespace MemoryHierarchySimulator
             {
                 address = addressLines[x].Split(":");
                 //address[0] is the read or write char
-
+                int VPN = IsolateVPN(address[1]);
                 //address[1] is the address itself
-                virtAddress = Convert.ToInt32(address[1], 16);
-                dc.findCacheVariables(virtAddress);
+                //virtAddress = Convert.ToInt32(address[1], 16);
+                //dc.findCacheVariables(virtAddress);
             }
             //Cache example
 
-            CacheHit ch = dc.findInstructionInCache();
+            /*CacheHit ch = dc.findInstructionInCache();
             dc.updateCacheTag();
 
             tlb.findTLBVariables(12);
             TlbHit t = tlb.findInTlb();
-            
+            */
 
         }
 
@@ -76,8 +76,8 @@ namespace MemoryHierarchySimulator
                 Console.WriteLine("The cache uses a write-allocate and write-back policy.");
             else
                 Console.WriteLine("The cache uses a write-allocate and no write-back policy.");
-            Console.WriteLine("Number of bites used for the index is {0}.", ConfigurationManager.AppSettings.Get("DC Index Bits"));
-            Console.WriteLine("Number of bites used for the offset is {0}.", ConfigurationManager.AppSettings.Get("DC Offset Bits"));
+            Console.WriteLine("Number of bytes used for the index is {0}.", ConfigurationManager.AppSettings.Get("DC Index Bits"));
+            Console.WriteLine("Number of bytes used for the offset is {0}.", ConfigurationManager.AppSettings.Get("DC Offset Bits"));
             Console.WriteLine();
 
             Console.WriteLine("L2-cache contains {0} sets.", ConfigurationManager.AppSettings.Get("L2 Number of sets"));
@@ -87,8 +87,8 @@ namespace MemoryHierarchySimulator
                 Console.WriteLine("The cache uses a write-allocate and write-back policy.");
             else
                 Console.WriteLine("The cache uses a write-allocate and no write-back policy.");
-            Console.WriteLine("Number of bites used for the index is {0}.", ConfigurationManager.AppSettings.Get("L2 Index Bits"));
-            Console.WriteLine("Number of bites used for the offset is {0}.", ConfigurationManager.AppSettings.Get("L2 Offset Bits"));
+            Console.WriteLine("Number of bytes used for the index is {0}.", ConfigurationManager.AppSettings.Get("L2 Index Bits"));
+            Console.WriteLine("Number of bytes used for the offset is {0}.", ConfigurationManager.AppSettings.Get("L2 Offset Bits"));
             Console.WriteLine();
 
             if (ConfigurationManager.AppSettings.Get("Virtual address") == "y")
@@ -183,6 +183,36 @@ namespace MemoryHierarchySimulator
             }
             
         }
+
+
+        public static int IsolateVPN(string MemoryReference)
+        {
+            int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
+            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
+
+            char[] MaskBuilder = new char[VPNBits + IndexBits];
+
+            for(int i = 0; i < VPNBits; i++)
+            {
+                MaskBuilder[i] = '1';
+            }
+
+            for(int i = 0; i < IndexBits; i++)
+            {
+                MaskBuilder[i + VPNBits] = '0';
+            }
+            // work on building up mask based on parameters 
+            //Convert.ToInt32("11011",2);
+
+            string Mask = string.Concat(MaskBuilder);
+
+            //int Mask = 0b0011111100000000;
+            return Convert.ToInt32(Mask, 2) & Convert.ToInt32(MemoryReference, 16);
+
+            // need to shift before return
+
+        }
+
 
     }
 }

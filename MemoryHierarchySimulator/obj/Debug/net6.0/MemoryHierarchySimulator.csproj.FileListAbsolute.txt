@@ -82,3 +82,7 @@ D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\n
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.pdb
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.genruntimeconfig.cache
 D:\ETSU\Fall 2022\OS\Projects\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\ref\MemoryHierarchySimulator.dll
+C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll

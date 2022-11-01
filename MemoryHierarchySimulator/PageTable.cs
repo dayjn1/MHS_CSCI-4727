@@ -31,16 +31,6 @@ namespace MemoryHierarchySimulator
             
         }
 
-        public void ProcessMemoryReference(string Reference)
-        {
-            string AccessType = Reference.Substring(0, 1);
-        }
-
-        //public PageTableEntry PassToTLB()
-        //{
-
-        //}
-
         public int GetPFN(int VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
