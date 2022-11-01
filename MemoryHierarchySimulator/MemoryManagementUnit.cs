@@ -62,12 +62,16 @@ namespace MemoryHierarchySimulator
                     }
                 }
 
+                
+
             }
 
             
 
             tlb.findTLBVariables(12);
             TlbHit t = tlb.findInTlb();
+            tlb.updateTlbTag(12);
+            t=tlb.findInTlb();
             
 
         }

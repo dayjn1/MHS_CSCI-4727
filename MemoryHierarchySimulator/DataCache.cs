@@ -95,7 +95,7 @@ namespace MemoryHierarchySimulator
 			}
         }
 
-        /// <summary>Updates the cache.</summary>
+        /// <summary>Updates the TLB.</summary>
         /// <param name="address">The address.</param>
         /// <param name="memory">The main memory.</param>
         ///   <para>
