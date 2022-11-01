@@ -11,13 +11,19 @@ namespace MemoryHierarchySimulator
 {
     class MMU
     {
-        public int TLBindex = 0;
-        public int PTindex = 0;
-        public int pageOffset = 0;
-        public int DCindex = 0;
-        public int DCoffset = 0;
-        public int L2Index = 0;
-        public int L2Offset = 0;
+        public static int VIRTpageNumber = 0;
+        public static int TLBtag = 0;
+        public static int TLBindex = 0;
+        public static int PTindex = 0;
+        public static int pageOffset = 0;
+        public static int DCtag = 0;
+        public static int DCindex = 0;
+        public static int DCoffset = 0;
+        public static int L2tag = 0;
+        public static int L2Index = 0;
+        public static int L2Offset = 0;
+        public static int TLBhit, TLBmiss, PThit, PTmiss, DChit, DCmiss, L2hit, L2miss,
+            reads, writes, MMrefs, DiskRefs, PTrefs;
         public static void Main(String[] args)
         {
             //Will hold the addresses from the inputted files
@@ -30,10 +36,16 @@ namespace MemoryHierarchySimulator
 
             //int that will hold the addresses int
             int virtAddress;
+            int physicalPageNum = 0;
+            string TLBresult = "MISS", PTresult = "MISS", DCresult = "MISS", L2result = "MISS";
             updateConfigSettings();
             addressLines = ParseInputFiles();
             calculateConfig();
             DisplayConfigSettings();
+
+            Console.WriteLine("Virtual  Virt.  Page TLB    TLB TLB  PT   Phys        DC  DC          L2  L2");
+            Console.WriteLine("Address  Page # Off  Tag    Ind Res. Res. Pg # DC Tag Ind Res. L2 Tag Ind Res.");
+            Console.WriteLine("-------- ------ ---- ------ --- ---- ---- ---- ------ --- ---- ------ --- ----");
 
             //runs through each address and sends it through TLB, Page Table, and Cache
             for (int x = 0; x < addressLines.Length; x++)
@@ -43,6 +55,34 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 virtAddress = Convert.ToInt32(address[1], 16);
+
+                //TLB checks to see if the physical address exists
+
+                //TLB HIT, Skip PageTable
+
+                //TLB MISS, Access PageTable
+
+                //PageTable finds the physical address for the virtual address
+
+                //PT MISS, Update the PT, return physical page number
+
+                //PT HIT, return the physical page number
+
+                //TLB Update regardless
+
+                //Access the Data Cache with the physical address
+
+                //DC READ HIT, bypass the L2 cache
+
+                //DC READ CONF/MISS, Pass address to the L2 cache to see if it hits or misses
+
+                //DC WRITE HIT Write-Back, Update DC Cache
+
+                //DC WRITE CONF Write-Back, Update L2 Cache with the address that is being overwritten
+
+                //DC WRITE HIT/CONF Write-Through, Update DC and L2 Cache
+
+                //DC MISS Write-Back, Update DC and L2 Cache
 
                 //L2 Cache example
                 dc.updateWriteCache(132);
@@ -62,13 +102,17 @@ namespace MemoryHierarchySimulator
                     }
                 }
 
+                Console.WriteLine("{0,8} {1,6} {2,4} {3,6} {4,3} {5,4} {6,4} {7,4} {8,6} {9,3} {10,4} {11,6} {12,3} {13,4}", 
+                    address[1], VIRTpageNumber, pageOffset, TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag, DCindex, 
+                    DCresult, L2tag, L2Index, L2result);
+
             }
 
-            
 
             tlb.findTLBVariables(12);
             TlbHit t = tlb.findInTlb();
-            
+
+            DisplayFinalStats();
 
         }
 
@@ -113,7 +157,74 @@ namespace MemoryHierarchySimulator
                 Console.WriteLine("The addresses read in are physical addresses.");
 
         }
+        //Prints out the final stats for the program
+        public static void DisplayFinalStats()
+        {
+            Console.WriteLine("\n\n\nSimulation Statistics\n");
+            Console.WriteLine("dtlb hits: {0}", TLBhit);
+            Console.WriteLine("dtlb misses: {0}", TLBmiss);
+            try
+            {
+                Console.WriteLine("dtlb hit ratio: {0}\n", TLBhit / TLBmiss);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("dtlb hit ratio: 1\n");
+            }
 
+            Console.WriteLine("pt hits: {0}", PThit);
+            Console.WriteLine("pt faults: {0}", PTmiss);
+            try
+            {
+                Console.WriteLine("pt hit ratio: {0}\n", PThit / PTmiss);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("pt hit ratio: 1\n");
+            }
+
+            Console.WriteLine("dc hits: {0}", DChit);
+            Console.WriteLine("dc misses: {0}", DCmiss);
+            try
+            {
+                Console.WriteLine("dc hit ratio: {0}\n", DChit / DCmiss);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("dc hit ratio: 1\n");
+            }
+
+            Console.WriteLine("L2 hits: {0}", L2hit);
+            Console.WriteLine("L2 misses: {0}", L2miss);
+            try
+            {
+                Console.WriteLine("L2 hit ratio: {0}\n", L2hit / L2miss);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("L2 hit ratio: 1\n");
+            }
+
+            Console.WriteLine("Total Reads: {0}", reads);
+            Console.WriteLine("Total Writes: {0}", writes);
+            try
+            {
+                Console.WriteLine("Ratio of Reads: {0}\n", reads / writes);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ratio of Reads: 1\n");
+            }
+   
+
+            Console.WriteLine("main memory refs : {0}", MMrefs);
+            Console.WriteLine("page table refs : {0}", PTrefs);
+            Console.WriteLine("disk refs : {0}", DiskRefs);
+
+
+
+
+        }
         public static void updateConfigSettings()
         {
             string[] lines;
