@@ -106,7 +106,7 @@ namespace MemoryHierarchySimulator
                     return TlbHit.HIT;
                 }
             }
-            findRandomOffset();
+            findLRU();
             return TlbHit.CONF;
 
 
