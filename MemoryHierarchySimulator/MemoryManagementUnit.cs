@@ -24,7 +24,7 @@ namespace MemoryHierarchySimulator
         public static int L2Index = 0;
         public static int L2Offset = 0;
         public static int TLBhit, TLBmiss, PThit, PTmiss, DChit, DCmiss, L2hit, L2miss,
-            reads, writes, MMrefs, DiskRefs, PTrefs;
+            reads, writes, MMrefs, DiskRefs, PTrefs, MemRefLength;
         public static void Main(String[] args)
         {
             //Will hold the addresses from the inputted files
@@ -42,7 +42,7 @@ namespace MemoryHierarchySimulator
             int virtAddress;
             int physAddress = 0;
             int physicalPageNum = 0;
-            string TLBresult = "MISS", PTresult = "MISS", DCresult = "MISS", L2result = "MISS";
+            string TLBresult = "MISS", PTresult, DCresult = "MISS", L2result = "MISS";
             updateConfigSettings();
             addressLines = ParseInputFiles();
             calculateConfig();
@@ -58,17 +58,12 @@ namespace MemoryHierarchySimulator
                 //Resets L2 Variables
                 l2Cache = CacheHit.BYPASS;
                 address = addressLines[x].Split(":");
+                PTresult = "";
 
-                address[1] = "00000c84";
                 //address[0] is the read or write char
-                
-                long VPN = IsolateVPN(address[1]);
-                long Offset = IsolateOffset(address[1]);
 
-                Console.WriteLine($"{address[1]} {VPN.ToString("X").PadLeft(6)} {Offset.ToString("X").PadLeft(4)}");
-
-                //address[1] is the address itself
-                physAddress = Convert.ToInt32(address[1], 16);
+                IsolateVPN(address[1]);
+                IsolateOffset(address[1]);
 
                 //TLB checks to see if the physical address exists
 
@@ -78,17 +73,34 @@ namespace MemoryHierarchySimulator
 
                 //PageTable finds the physical address for the virtual address
 
-                //PT MISS, Update the PT, return physical page number
-
                 //PT HIT, return the physical page number
+                if (pt.PFNPresentAndValid(VIRTpageNumber))
+                {
+                    PThit++;
+                    PTresult = "HIT";
+                    physicalPageNum = pt.GetPFN(VIRTpageNumber);
+                }
+                else     //PT MISS, Update the PT, return physical page number
+                {
+                    PTmiss++;
+                    PTresult = "MISS";
+                    physicalPageNum = pt.GetPFN(VIRTpageNumber);
+                }
+
+                // build new virt address with PFN + offset
+                virtAddress = int.Parse(physicalPageNum.ToString() + pageOffset.ToString());
+
 
                 //TLB Update regardless
 
+                // REPLACED CARLOS' physAddress WITH virtAddress
+                // need to differentiate with the two based on config settings
+
                 //Access the Data Cache with the physical address
-                if(address[0] == "R")
+                if (address[0] == "R")
                 {
                     reads++;
-                    dCache = dc.updateReadCache(physAddress);
+                    dCache = dc.updateReadCache(virtAddress);
                     switch (dCache)
                     {
                         case CacheHit.HIT:
@@ -98,12 +110,12 @@ namespace MemoryHierarchySimulator
                         case CacheHit.CONF:
                             DCmiss++;
                             //DC WRITE CONF Write-Back, Update L2 Cache with the address that is being overwritten
-                            l2Cache = l2.updateReadCache(physAddress);
+                            l2Cache = l2.updateReadCache(virtAddress);
                             break;
                         case CacheHit.MISS:
                             DCmiss++;
                             //DC READ CONF/MISS, Pass address to the L2 cache to see if it hits or misses
-                            l2Cache = l2.updateReadCache(physAddress);
+                            l2Cache = l2.updateReadCache(virtAddress);
                             break;
 
                     }
@@ -135,7 +147,7 @@ namespace MemoryHierarchySimulator
                 else
                 {
                     writes++;
-                    dCache = dc.updateWriteCache(physAddress);
+                    dCache = dc.updateWriteCache(virtAddress);
                     switch (dCache)
                     {
                         case CacheHit.HIT:
@@ -148,7 +160,7 @@ namespace MemoryHierarchySimulator
                             else
                             {
                                 //DC WRITE HIT/CONF Write-Through, Update DC and L2 Cache
-                                l2Cache = l2.updateWriteCache(physAddress);
+                                l2Cache = l2.updateWriteCache(virtAddress);
                             }
 
                             break;
@@ -164,17 +176,17 @@ namespace MemoryHierarchySimulator
                                 }
                                 else
                                 {
-                                    l2Cache = l2.updateWriteCache(physAddress);
+                                    l2Cache = l2.updateWriteCache(virtAddress);
                                 }
 
                             }
                             else
-                                l2Cache = l2.updateWriteCache(physAddress);
+                                l2Cache = l2.updateWriteCache(virtAddress);
                             break;
                         case CacheHit.MISS:
                             DCmiss++;
                             //DC MISS Write-Back, Update DC and L2 Cache
-                            l2Cache = l2.updateWriteCache(physAddress);
+                            l2Cache = l2.updateWriteCache(virtAddress);
                             break;
 
                     }
@@ -205,7 +217,8 @@ namespace MemoryHierarchySimulator
                 }
 
                 Console.WriteLine("{0,8} {1,6} {2,4} {3,6} {4,3} {5,4} {6,4} {7,4} {8,6} {9,3} {10,4} {11,6} {12,3} {13,4}", 
-                    address[1], VIRTpageNumber, pageOffset, TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag, DCindex, 
+                    address[1].PadLeft(8, '0'), VIRTpageNumber.ToString("X").PadLeft(6), pageOffset.ToString("X").PadLeft(4), 
+                    TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag, DCindex, 
                     DCresult, L2tag, L2Index, L2result);
 
             }
@@ -373,6 +386,8 @@ namespace MemoryHierarchySimulator
                 string path = Path.GetFullPath(fileName);     //Gets the path to Test.txt
                 lines = System.IO.File.ReadAllLines(path);
                 Console.Clear();
+
+                MemRefLength = lines[0].Length;               // how many hex bits are in a memory ref
                 return lines;
             }
             catch (Exception)
@@ -383,8 +398,9 @@ namespace MemoryHierarchySimulator
             
         }
 
-
-        public static long IsolateVPN(string MemoryReference)
+        // need to account for ENTIRE address, VPN will include everything inputted minus the offset
+        // can probably set an int for how big addresses are in file parsing
+        public static void IsolateVPN(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
             int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
@@ -407,10 +423,10 @@ namespace MemoryHierarchySimulator
 
             long MaskResult = Mask & memRef;
 
-            return MaskResult >> IndexBits;
+            VIRTpageNumber = (int)MaskResult >> IndexBits;
         }
 
-        public static long IsolateOffset(string MemoryReference)
+        public static void IsolateOffset(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
             int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
@@ -431,9 +447,8 @@ namespace MemoryHierarchySimulator
             long Mask = Convert.ToInt64(strMask, 2);
             long memRef = Convert.ToInt64(MemoryReference, 16);
 
-            long MaskResult = Mask & memRef;
+            pageOffset = (int)Mask & (int)memRef;
 
-            return MaskResult;
         }
 
 

@@ -32,6 +32,14 @@ namespace MemoryHierarchySimulator
             
         }
 
+        public bool PFNPresentAndValid(long VPN)
+        {
+            if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
+                return true;
+            else
+                return false;
+        }
+
         public int GetPFN(long VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
@@ -47,6 +55,7 @@ namespace MemoryHierarchySimulator
                 PT[VPN].ValidBit = true;
 
                 InvalidateEntries(PT[VPN].PFN);
+                PT[VPN].ValidBit = true;            // invalidate will mark all as false, so reset the current one back to true
 
                 return PT[VPN].PFN;
             }
