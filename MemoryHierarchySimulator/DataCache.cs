@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,17 +10,20 @@ namespace MemoryHierarchySimulator
 {
     internal class DataCache
     {
-		public byte[][] l1Cache;
 		//Used to check if the tags are the same from addresses
 		public int[] tagIndexCache;
-		//Number of bytes that are going to be in a block
+		public bool[] dirtyBits;
+		public LRU[] lru;
 
 		//Sets up the association for the cache
 		private int association = 1;
 		private int memoryKicked = 0;
 		private Random rand;
 
-		public int tag, index, offset, cacheLines;
+		public int tag, index, offset, cacheLines, address;
+
+		public int lastAddress { get; set; }
+		public int lastIndex { get; set; }
 
 		//Allows for configuration
 		public int offsetBitAmount { get; set; }
@@ -27,6 +31,7 @@ namespace MemoryHierarchySimulator
 		public int indexSize { get; set; }
 		//Number of words allowed in the cache
 		public int numberOfBytes { get; set; }
+
 		public int offsetMask;
 		public int indexMask;
 
@@ -38,7 +43,7 @@ namespace MemoryHierarchySimulator
 	    * Date created: 4/19/21 <br>
 	    * @author Samuel Reynolds
 	    */
-        public DataCache()
+        public DataCache(string cacheType)
         {
             tag = 0;
             index = 0;
@@ -46,27 +51,48 @@ namespace MemoryHierarchySimulator
             //association = config.associativity;
 
             rand = new Random();
-            //Finds how many bits will be allowed in the offset
-            offsetBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Offset Bits"));
-            //Finds how many bits will be in the index
-            indexBitAmount = int.Parse(ConfigurationManager.AppSettings.Get("DC Index Bits"));
+			switch (cacheType)
+			{
+				case "L1":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("DC Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets"));
 
-            association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
-            
-            cacheLines = int.Parse(ConfigurationManager.AppSettings.Get("DC Number of sets")) * association;
+					association = int.Parse(ConfigurationManager.AppSettings.Get("DC Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
+					break;
+				case "L2":
+					//Finds how many bits will be allowed in the offset
+					offsetBitAmount = (int)Math.Log(int.Parse(ConfigurationManager.AppSettings.Get("L2 Line size")), 2);
+					//Finds how many bits will be in the index
+					indexSize = int.Parse(ConfigurationManager.AppSettings.Get("L2 Number of sets"));
+
+					association = int.Parse(ConfigurationManager.AppSettings.Get("L2 Set size"));
+					indexBitAmount = (int)Math.Log(indexSize, 2);
+					break;
+			}
+
+			cacheLines =  indexSize * association;
 
             numberOfBytes = (int)Math.Pow(2, offsetBitAmount) + 2;
             //This should be configurable in the future to allow 2/4 way association
             offsetMask = (int)Math.Pow(2, offsetBitAmount) - 1;
             indexMask = (int)Math.Pow(2, indexBitAmount) - 1;
 
-            l1Cache = new byte[cacheLines][];
             tagIndexCache = new int[cacheLines];
+			dirtyBits = new bool[cacheLines];
+			lru = new LRU[indexSize];
             //Setting up the cache to hold memory
-            for (int x = 0; x < l1Cache.Length; x++)
+            for (int x = 0; x < tagIndexCache.Length; x++)
             {
                 tagIndexCache[x] = -1;
+				dirtyBits[x] = false;
             }
+			for(int x = 0; x < indexSize; x++)
+			{
+				lru[x] = new LRU();
+			}
         }
 
         /// <summary>Updates the cache.</summary>
@@ -79,31 +105,36 @@ namespace MemoryHierarchySimulator
         /// <exception cref="System.NotImplementedException"></exception>
         public void updateCacheTag()
 		{
-			/*	Can be reused for the TLB
-			//Adds new byte of memory into the cache
-			byte[] mem = new byte[numberOfBytes];
-
-			for (int x = 0; x < numberOfBytes; x++)
-			{
-				mem[x] = (byte)memory.MainMemory[address + x];
-			}
-			
-			l1Cache[index + indexSize * memoryKicked] = mem;
-			*/
 			tagIndexCache[index + indexSize * memoryKicked] = tag;
+			lru[index % indexSize].ComputeAddress(address);
 		}
 
-		/* May be useful for TLB
+
 		/// <summary>Updates the cache with write instructions.</summary>
 		/// <param name="result">The result.</param>
-		public void updateWriteCache(int result)
+		public CacheHit updateWriteCache(int addressUp)
 		{
-			l1Cache[index][offset] = (byte)((result & 16711680) >> 16);     //Stores the MSB value of r0 at the address in cache
-			l1Cache[index][offset + 1] = (byte)((result & 65280) >> 8);     //Stores the TSB value of r0 at the address in cache
-			l1Cache[index][offset + 2] = (byte)(result & 255);              //Stores the LSB value of r0 at the address in cache
-		}
-		*/
+			findCacheVariables(addressUp);
+			CacheHit ch = findInstructionInCache();
+			if (ch == CacheHit.HIT)
+			{
+				dirtyBits[index] = true;
+			}
+			updateCacheTag();
 
+			return ch;
+		}
+
+		/// <summary>Updates the cache with read instructions.</summary>
+		/// <param name="result">The result.</param>
+		public CacheHit updateReadCache(int addressUp)
+		{
+			findCacheVariables(addressUp);
+			CacheHit ch = findInstructionInCache();
+			updateCacheTag();
+
+			return ch;
+		}
 		/// <summary>
 		///   <para>
 		/// Finds the cache variables in order to check if the address is in the cache.
@@ -115,12 +146,12 @@ namespace MemoryHierarchySimulator
 		/// <param name="tag">The tag.</param>
 		public void findCacheVariables(int inst)
 		{
-			int address = inst;
-			offset = address & offsetMask;
-			address = address >> offsetBitAmount;
-			index = address & indexMask;
-			address = address >> indexBitAmount;
-			tag = address;
+			address = inst;
+			offset = inst & offsetMask;
+            inst = inst >> offsetBitAmount;
+			index = inst & indexMask;
+            inst = inst >> indexBitAmount;
+			tag = inst;
 		}
 
 		/// <summary>Finds whether the instruction hit or missed in the cache.</summary>
@@ -129,13 +160,13 @@ namespace MemoryHierarchySimulator
 		{
 			//finds the offset for the types of association
 			
-			for (int x = index; x < l1Cache.Length; x = x + indexSize)
+			for (int x = index; x < tagIndexCache.Length; x = x + indexSize)
 			{
 				if (tagIndexCache[x] == -1)
 				{
 					index = x;
 					memoryKicked = 0;
-					return CacheHit.MISSED;
+					return CacheHit.MISS;
 				}
 				else if (tagIndexCache[x] != tag)
 				{
@@ -145,19 +176,19 @@ namespace MemoryHierarchySimulator
 				{
 					index = x;
 					memoryKicked = 0;
+					lru[index % indexSize].ComputeAddress(address);
 					return CacheHit.HIT;
 				}
 			}
-			findRandomOffset();
+			findLRU();
 			return CacheHit.CONF;
 		}
 
         /// <summary>Clears the cache.</summary>
         public void clearCache()
 		{
-			for (int x = 0; x < l1Cache.Length; x++)
+			for (int x = 0; x < tagIndexCache.Length; x++)
 			{
-				l1Cache[x] = null;
 				tagIndexCache[x] = 0;
 			}
 			memoryKicked = 0;
@@ -177,6 +208,29 @@ namespace MemoryHierarchySimulator
 					break;
 			}
 		}
+
+		public void findLRU()
+		{
+            if(association == 1)
+			{
+				memoryKicked = 0;
+				lastAddress = lru[index].GetLRU();
+			}
+			else
+			{
+				lastAddress = lru[index % indexSize].GetLRU();
+				int lastTag = lastAddress >> (indexBitAmount + offsetBitAmount);
+
+                for (int x = 0; x < association; x++)
+				{
+					if (tagIndexCache[index + indexSize * x] == lastTag)
+					{
+						memoryKicked = x;
+						lastIndex = index + indexSize * x;
+					}
+				}
+			}
+        }
 	}
 
 }
