@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace MemoryHierarchySimulator
 {
@@ -34,6 +35,7 @@ namespace MemoryHierarchySimulator
             DTLB tlb = new DTLB();
             CacheHit dCache = new CacheHit();
             CacheHit l2Cache = new CacheHit();
+            TlbHit Dtlb = new TlbHit();
 
             //int that will hold the addresses int
             int virtAddress;
@@ -59,12 +61,34 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 physAddress = Convert.ToInt32(address[1], 16);
-
+                
+                
                 //TLB checks to see if the physical address exists
+                                                                        //if statement here to see if tlb is disabled or not
+                Dtlb = tlb.updateTLB(12);
+                
+                switch (Dtlb)
+                {
+                    case TlbHit.HIT:
+                        TLBhit++;
+                        //TLB HIT, Skip PageTable
+                        goto Skip;
+                        
+                    case TlbHit.CONF:
+                        TLBmiss++;
+                        //TLB MISS, Access PageTable
+                        break;
 
-                //TLB HIT, Skip PageTable
+                    case TlbHit.MISS:
+                        TLBmiss++;
+                        //TLB MISS, Access PageTable
+                        break;
+                }
+               
 
-                //TLB MISS, Access PageTable
+              
+
+                
 
                 //PageTable finds the physical address for the virtual address
 
@@ -72,10 +96,13 @@ namespace MemoryHierarchySimulator
 
                 //PT HIT, return the physical page number
 
-                //TLB Update regardless
+ Skip:          //TLB Update regardless
+                TLBresult = Dtlb.ToString();
+                TLBindex = tlb.index;
+                TLBtag = tlb.tag;
 
                 //Access the Data Cache with the physical address
-                if(address[0] == "R")
+                if (address[0] == "R")
                 {
                     reads++;
                     dCache = dc.updateReadCache(physAddress);

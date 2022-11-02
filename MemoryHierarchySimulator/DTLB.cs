@@ -15,7 +15,7 @@ namespace MemoryHierarchySimulator
         public int[] tlbIndex;
         public LRU[] lru;
 
-        public int numOfLines, dtlbHits, dtlbMisses, tlbTag, tlbIndexNum, address;
+        public int numOfLines, address;
         public int tag, index;
         //association set up
         private int memoryKicked = 0;
@@ -58,7 +58,7 @@ namespace MemoryHierarchySimulator
             tlbIndex = new int[numOfLines];
             lru = new LRU[indexSize];
             //set up TLB
-            for (int x = 0; x < TLB.Length; x++)
+            for (int x = 0; x < tlbIndex.Length; x++)
             {
                 tlbIndex[x] = -1;
             }
@@ -73,12 +73,19 @@ namespace MemoryHierarchySimulator
 
 
         }
+
+        public TlbHit updateTLB(int address)
+        {
+            findTLBVariables(address);
+            TlbHit hit = findInTlb();
+            updateTlbTag(address);
+            return hit;
+
+        }
         /// <summary>Updates the TLB.</summary>
        
         public void updateTlbTag(int physicalAddress)
         {
-     
-
             TLB[index + indexSize * memoryKicked] = physicalAddress;
             tlbIndex[index + indexSize * memoryKicked] = tag;
             lru[index % indexSize].ComputeAddress(address);
@@ -92,7 +99,7 @@ namespace MemoryHierarchySimulator
                 {
                     index = x;
                     memoryKicked = 0;
-                    return TlbHit.MISSED;
+                    return TlbHit.MISS;
                 }
                 else if (tlbIndex[x] != tag)
                 {
@@ -158,7 +165,7 @@ namespace MemoryHierarchySimulator
 
                 for (int x = 0; x < numOfLines; x++)
                 {
-                    if (tlbIndex[index + indexSize * x] == lastTag)
+                    if (tlbIndex[index + indexSize * x] == lastTag) 
                     {
                         memoryKicked = x;
                         lastIndex = index + indexSize * x;
