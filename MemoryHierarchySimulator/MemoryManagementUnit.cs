@@ -26,6 +26,7 @@ namespace MemoryHierarchySimulator
             string[] address;
             DataCache dc = new DataCache();
             DTLB tlb = new DTLB();
+            PageTable pt = new PageTable();
 
 
             //int that will hold the addresses int
@@ -35,12 +36,25 @@ namespace MemoryHierarchySimulator
             calculateConfig();
             DisplayConfigSettings();
 
+
+
+            Console.WriteLine("Virtual  Virt.  Page TLB   TLB TLB  PT   Phys        DC  DC          L2  L2");
+            Console.WriteLine("Address  Page # Off  Tag   Ind Res. Res. Pg # DC Tag Ind Res. L2 Tag Ind Res.");
+            Console.WriteLine("-------- ------ ---- ----- --- ---- ---- ---- ------ --- ---- ------ --- ----");
+             
             //runs through each address and sends it through TLB, Page Table, and Cache
             for (int x = 0; x < addressLines.Length; x++)
             {
                 address = addressLines[x].Split(":");
+
+                address[1] = "00000c84";
                 //address[0] is the read or write char
-                int VPN = IsolateVPN(address[1]);
+                
+                long VPN = IsolateVPN(address[1]);
+                long Offset = IsolateOffset(address[1]);
+
+                Console.WriteLine($"{address[1]} {VPN.ToString("X").PadLeft(6)} {Offset.ToString("X").PadLeft(4)}");
+
                 //address[1] is the address itself
                 //virtAddress = Convert.ToInt32(address[1], 16);
                 //dc.findCacheVariables(virtAddress);
@@ -185,7 +199,7 @@ namespace MemoryHierarchySimulator
         }
 
 
-        public static int IsolateVPN(string MemoryReference)
+        public static long IsolateVPN(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
             int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
@@ -201,16 +215,40 @@ namespace MemoryHierarchySimulator
             {
                 MaskBuilder[i + VPNBits] = '0';
             }
-            // work on building up mask based on parameters 
-            //Convert.ToInt32("11011",2);
+            
+            string strMask = string.Concat(MaskBuilder);
+            long Mask = Convert.ToInt64(strMask, 2);
+            long memRef = Convert.ToInt64(MemoryReference, 16);
 
-            string Mask = string.Concat(MaskBuilder);
+            long MaskResult = Mask & memRef;
 
-            //int Mask = 0b0011111100000000;
-            return Convert.ToInt32(Mask, 2) & Convert.ToInt32(MemoryReference, 16);
+            return MaskResult >> IndexBits;
+        }
 
-            // need to shift before return
+        public static long IsolateOffset(string MemoryReference)
+        {
+            int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
+            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
 
+            char[] MaskBuilder = new char[VPNBits + IndexBits];
+
+            for (int i = 0; i < VPNBits; i++)
+            {
+                MaskBuilder[i] = '0';
+            }
+
+            for (int i = 0; i < IndexBits; i++)
+            {
+                MaskBuilder[i + VPNBits] = '1';
+            }
+
+            string strMask = string.Concat(MaskBuilder);
+            long Mask = Convert.ToInt64(strMask, 2);
+            long memRef = Convert.ToInt64(MemoryReference, 16);
+
+            long MaskResult = Mask & memRef;
+
+            return MaskResult;
         }
 
 

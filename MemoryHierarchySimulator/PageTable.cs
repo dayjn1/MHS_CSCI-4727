@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,10 +20,10 @@ namespace MemoryHierarchySimulator
         int Hits = 0;
         int Misses = 0;
 
-        public PageTable(int NumVirtPages, int NumPhysPages, int PageSize)
+        public PageTable()
         {
-            PT = new PageTableEntry[NumVirtPages];
-            FT = new FrameTable(NumPhysPages);
+            PT = new PageTableEntry[Int32.Parse(ConfigurationManager.AppSettings.Get("PT Number of virtual pages"))];
+            FT = new FrameTable(Int32.Parse(ConfigurationManager.AppSettings.Get("PT Number of physical pages")));
 
             for(int i = 0; i < PT.Length; i++)  // create all pages, setting each to invalid
             {
@@ -31,7 +32,7 @@ namespace MemoryHierarchySimulator
             
         }
 
-        public int GetPFN(int VPN)
+        public int GetPFN(long VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
             {
