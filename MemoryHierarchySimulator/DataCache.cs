@@ -166,7 +166,7 @@ namespace MemoryHierarchySimulator
 				{
 					index = x;
 					memoryKicked = 0;
-					return CacheHit.MISSED;
+					return CacheHit.MISS;
 				}
 				else if (tagIndexCache[x] != tag)
 				{
