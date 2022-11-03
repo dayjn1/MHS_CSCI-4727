@@ -36,6 +36,8 @@ namespace MemoryHierarchySimulator
             CacheHit dCache = new CacheHit();
             CacheHit l2Cache = new CacheHit();
             TlbHit Dtlb = new TlbHit();
+            int[] test = new int[] { 12, 8, 1, 12, 4, 1, 1, 12, 0 };
+
 
             //int that will hold the addresses int
             int virtAddress;
@@ -61,12 +63,13 @@ namespace MemoryHierarchySimulator
 
                 //address[1] is the address itself
                 physAddress = Convert.ToInt32(address[1], 16);
+
                 
-                
+
                 //TLB checks to see if the physical address exists
                                                                         //if statement here to see if tlb is disabled or not
-                Dtlb = tlb.updateTLB(12);
-                
+                Dtlb = tlb.updateTLB(test[x]);
+
                 switch (Dtlb)
                 {
                     case TlbHit.HIT:

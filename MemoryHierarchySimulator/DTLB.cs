@@ -29,6 +29,9 @@ namespace MemoryHierarchySimulator
         public int lastAddress { get; set; }
         public int lastIndex { get; set; }
 
+        int[] test = new int[] { 6, 4, 0, 6, 2, 0, 0, 6, 0 };
+        int wewew = 0;
+
 
         /**
 	    * Method Name: DTLB <br>
@@ -153,7 +156,8 @@ namespace MemoryHierarchySimulator
 
         public void findLRU()
         {
-            if (numOfLines == 1)
+
+            if (setSize == 1)
             {
                 memoryKicked = 0;
                 lastAddress = lru[index].GetLRU();
@@ -162,8 +166,9 @@ namespace MemoryHierarchySimulator
             {
                 lastAddress = lru[index % indexSize].GetLRU();
                 int lastTag = lastAddress >> (indexBitAmount);
-
-                for (int x = 0; x < numOfLines; x++)
+                //int lastTag = test[wewew];
+                //wewew++;
+                for (int x = 0; x < setSize; x++)
                 {
                     if (tlbIndex[index + indexSize * x] == lastTag) 
                     {
