@@ -407,6 +407,15 @@ namespace MemoryHierarchySimulator
 
             char[] MaskBuilder = new char[VPNBits + IndexBits];
 
+            long memRef = Convert.ToInt64(MemoryReference, 2);
+
+
+            if ((MemRefLength * 4) > (VPNBits + IndexBits))  // hex to binary bit with the * 4
+            {
+                // create mask that only allows through the VPNBits + IndexBits least sig bits
+            }
+            //else if there are not enough bits total, pad with 0s
+
             for(int i = 0; i < VPNBits; i++)
             {
                 MaskBuilder[i] = '1';
@@ -419,7 +428,7 @@ namespace MemoryHierarchySimulator
             
             string strMask = string.Concat(MaskBuilder);
             long Mask = Convert.ToInt64(strMask, 2);
-            long memRef = Convert.ToInt64(MemoryReference, 16);
+            //long memRef = Convert.ToInt64(MemoryReference, 16);
 
             long MaskResult = Mask & memRef;
 
