@@ -37,6 +37,8 @@ namespace MemoryHierarchySimulator
             CacheHit dCache = new CacheHit();
             CacheHit l2Cache = new CacheHit();
 
+            //IsolateOffset("EFA");
+
 
             //int that will hold the addresses int
             int virtAddress;
@@ -47,6 +49,9 @@ namespace MemoryHierarchySimulator
             addressLines = ParseInputFiles();
             calculateConfig();
             DisplayConfigSettings();
+
+            address = addressLines[0].Split(":");       // calculate the bits in a memory reference
+            MemRefLength = address[1].Length * 4;
 
             Console.WriteLine("Virtual  Virt.  Page TLB    TLB TLB  PT   Phys        DC  DC          L2  L2");
             Console.WriteLine("Address  Page # Off  Tag    Ind Res. Res. Pg # DC Tag Ind Res. L2 Tag Ind Res.");
@@ -62,8 +67,8 @@ namespace MemoryHierarchySimulator
 
                 //address[0] is the read or write char
 
-                IsolateVPN(address[1]);
-                IsolateOffset(address[1]);
+                address[1] = CheckMemoryReference(address[1]);      // removes, adds, or leaves the same
+                IsolateVPNAndOffset(address[1]);
 
                 //TLB checks to see if the physical address exists
 
@@ -387,7 +392,6 @@ namespace MemoryHierarchySimulator
                 lines = System.IO.File.ReadAllLines(path);
                 Console.Clear();
 
-                MemRefLength = lines[0].Length;               // how many hex bits are in a memory ref
                 return lines;
             }
             catch (Exception)
@@ -398,25 +402,16 @@ namespace MemoryHierarchySimulator
             
         }
 
-        // need to account for ENTIRE address, VPN will include everything inputted minus the offset
-        // can probably set an int for how big addresses are in file parsing
-        public static void IsolateVPN(string MemoryReference)
+        /// <summary>Sets VPN value based on config settings and given memory reference</summary>
+        public static void IsolateVPNAndOffset(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
             int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
 
             char[] MaskBuilder = new char[VPNBits + IndexBits];
+            long memRef = Convert.ToInt64(MemoryReference, 16);
 
-            long memRef = Convert.ToInt64(MemoryReference, 2);
-
-
-            if ((MemRefLength * 4) > (VPNBits + IndexBits))  // hex to binary bit with the * 4
-            {
-                // create mask that only allows through the VPNBits + IndexBits least sig bits
-            }
-            //else if there are not enough bits total, pad with 0s
-
-            for(int i = 0; i < VPNBits; i++)
+            for (int i = 0; i < VPNBits; i++)           // VPN Mask
             {
                 MaskBuilder[i] = '1';
             }
@@ -428,21 +423,10 @@ namespace MemoryHierarchySimulator
             
             string strMask = string.Concat(MaskBuilder);
             long Mask = Convert.ToInt64(strMask, 2);
-            //long memRef = Convert.ToInt64(MemoryReference, 16);
 
-            long MaskResult = Mask & memRef;
+            VIRTpageNumber = (int)(Mask & memRef) >> IndexBits;
 
-            VIRTpageNumber = (int)MaskResult >> IndexBits;
-        }
-
-        public static void IsolateOffset(string MemoryReference)
-        {
-            int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
-            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
-
-            char[] MaskBuilder = new char[VPNBits + IndexBits];
-
-            for (int i = 0; i < VPNBits; i++)
+            for (int i = 0; i < VPNBits; i++)           // Offset mask
             {
                 MaskBuilder[i] = '0';
             }
@@ -452,12 +436,50 @@ namespace MemoryHierarchySimulator
                 MaskBuilder[i + VPNBits] = '1';
             }
 
-            string strMask = string.Concat(MaskBuilder);
-            long Mask = Convert.ToInt64(strMask, 2);
-            long memRef = Convert.ToInt64(MemoryReference, 16);
+            strMask = string.Concat(MaskBuilder);
+            Mask = Convert.ToInt64(strMask, 2);
 
             pageOffset = (int)Mask & (int)memRef;
+        }
 
+        /// <summary>Checks config settings and bit in given Memory Reference. If reference is too long, it will remove the leftmost 
+        /// bits as needed. If reference is too short, it will pad with zeros.</summary>
+        /// <returns>new Memory Reference, if changes were needed.</returns>
+        public static string CheckMemoryReference(string MemoryReference)
+        {
+            int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
+            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
+
+            char[] RemoveExtraBitsMask;
+
+            long memRef = Convert.ToInt64(MemoryReference, 16);
+
+            if (MemRefLength > (VPNBits + IndexBits))
+            {
+                // create mask that only allows through the VPNBits + IndexBits least sig bits
+                RemoveExtraBitsMask = new char[MemRefLength];
+                for (int i = 0; i < MemRefLength; i++)
+                {
+                    if (i < MemRefLength - (VPNBits + IndexBits))
+                        RemoveExtraBitsMask[i] = '0';
+                    else
+                        RemoveExtraBitsMask[i] = '1';
+                }
+
+                string removeBitsMask = string.Concat(RemoveExtraBitsMask);
+                long RemoveBitsMask = Convert.ToInt64(removeBitsMask, 2);
+
+                memRef &= RemoveBitsMask;
+            }
+            else if (MemRefLength < (VPNBits + IndexBits))
+            {
+                MemoryReference = Convert.ToString(Convert.ToInt64(MemoryReference, 16), 2);
+                MemoryReference = MemoryReference.PadLeft(VPNBits + IndexBits, '0');
+
+                memRef = Convert.ToInt64(MemoryReference, 16);
+            }
+
+            return memRef.ToString("X");
         }
 
 

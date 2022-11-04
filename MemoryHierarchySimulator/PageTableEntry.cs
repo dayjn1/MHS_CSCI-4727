@@ -13,6 +13,7 @@ namespace MemoryHierarchySimulator
         public int ProtectionBits;          // read, write, etc
         public bool DirtyBit;               // page modified since load
 
+        /// <summary>Creates a new Page table entry, with the PFN set to -1.</summary>
         public PageTableEntry()
         {
             this.PFN = -1;

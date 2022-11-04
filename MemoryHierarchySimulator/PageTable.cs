@@ -20,6 +20,8 @@ namespace MemoryHierarchySimulator
         int Hits = 0;
         int Misses = 0;
 
+        /// <summary>Creates page table and presets all of the pages options. Uses config settings to set the number of
+        /// virtual and physical pages.</summary>
         public PageTable()
         {
             PT = new PageTableEntry[Int32.Parse(ConfigurationManager.AppSettings.Get("PT Number of virtual pages"))];
@@ -29,9 +31,10 @@ namespace MemoryHierarchySimulator
             {
                 PT[i] = new PageTableEntry();
             }
-            
         }
 
+        /// <summary>Determines if the PFN at a given VPN is valid</summary>
+        /// <returns>bool - true if valid, false if not</returns>
         public bool PFNPresentAndValid(long VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
@@ -40,6 +43,9 @@ namespace MemoryHierarchySimulator
                 return false;
         }
 
+        /// <summary>Will return the PFN for a given VPN. If PFN at the VPN is empty or invalid, LRU algorithm is called 
+        /// from Frame table class that get the next available PFN.</summary>
+        /// <returns>Page Frame Number</returns>
         public int GetPFN(long VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
@@ -62,6 +68,7 @@ namespace MemoryHierarchySimulator
                 
         }
 
+        /// <summary>Takes given PFN integer and invalidates all instances of that PFN</summary>
         public void InvalidateEntries(int PFN)
         {
             foreach(var entry in PT)

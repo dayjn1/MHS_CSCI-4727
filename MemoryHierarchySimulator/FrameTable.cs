@@ -10,7 +10,7 @@ namespace MemoryHierarchySimulator
     {
         public List<int> Table;
 
-        // Since no connection to memory, just creating a basic list of all possible PFN and reordering it as simulation runs
+        /// <summary>Creates a Frame table, which is a basic list<int> that is reordered as the simulation runs.</summary>
         public FrameTable(int NumPhysPages)
         {
             Table = new List<int>();
@@ -21,14 +21,16 @@ namespace MemoryHierarchySimulator
             }
         }
 
-        // All PFN are loaded on creation of class, no need to check if it exists. Just updates the list
+        /// <summary>Readjusts the frame table to keep LRU algorithm straight. Whenever a FN is used, it needs to be at the 
+        /// end of the list.</summary>
         public void ReAdjustFrameTable(int PFN)
         {           
             Table.Remove(PFN);
             Table.Add(PFN);
         }
-       
-        // Gets the LRU PFN and readds to the back of the list
+
+        /// <summary>Performs a basic LRU algorithm to get the next frame number.</summary>
+        /// <returns>LRU frame number result.</returns>
         public int GetLRU()
         {
             int PFN = Table[0];
