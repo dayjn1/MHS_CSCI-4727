@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Collections.Specialized;
 using System.Drawing;
 using Microsoft.IdentityModel.Protocols;
+using System.Runtime.CompilerServices;
 
 namespace MemoryHierarchySimulator
 {
@@ -36,6 +37,9 @@ namespace MemoryHierarchySimulator
             PageTable pt = new PageTable();
             CacheHit dCache = new CacheHit();
             CacheHit l2Cache = new CacheHit();
+            TlbHit Dtlb = new TlbHit();
+            int[] test = new int[] { 12, 8, 1, 12, 4, 1, 1, 12, 0 };
+
 
             //IsolateOffset("EFA");
 
@@ -70,11 +74,34 @@ namespace MemoryHierarchySimulator
                 address[1] = CheckMemoryReference(address[1]);      // removes, adds, or leaves the same
                 IsolateVPNAndOffset(address[1]);
 
+                
+
                 //TLB checks to see if the physical address exists
+                                                                        //if statement here to see if tlb is disabled or not
+                Dtlb = tlb.updateTLB(test[x]);
 
-                //TLB HIT, Skip PageTable
+                switch (Dtlb)
+                {
+                    case TlbHit.HIT:
+                        TLBhit++;
+                        //TLB HIT, Skip PageTable
+                        goto Skip;
+                        
+                    case TlbHit.CONF:
+                        TLBmiss++;
+                        //TLB MISS, Access PageTable
+                        break;
 
-                //TLB MISS, Access PageTable
+                    case TlbHit.MISS:
+                        TLBmiss++;
+                        //TLB MISS, Access PageTable
+                        break;
+                }
+               
+
+              
+
+                
 
                 //PageTable finds the physical address for the virtual address
 
@@ -96,7 +123,10 @@ namespace MemoryHierarchySimulator
                 virtAddress = int.Parse(physicalPageNum.ToString() + pageOffset.ToString());
 
 
-                //TLB Update regardless
+ Skip:          //TLB Update regardless
+                TLBresult = Dtlb.ToString();
+                TLBindex = tlb.index;
+                TLBtag = tlb.tag;
 
                 // REPLACED CARLOS' physAddress WITH virtAddress
                 // need to differentiate with the two based on config settings

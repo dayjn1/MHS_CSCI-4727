@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,11 @@ namespace MemoryHierarchySimulator
     {
         public int[] TLB;
         public int[] tlbIndex;
-        public int numOfLines, dtlbHits, dtlbMisses, tlbTag, tlbIndexNum;
-        public int tag, index, offset;
+        public LRU[] lru;
+
+        public int numOfLines, address;
+        public int tag, index;
+        //association set up
         private int memoryKicked = 0;
         public int indexMask;
         private Random rand;
@@ -21,8 +25,12 @@ namespace MemoryHierarchySimulator
         private int indexSize { get; set; }
         private int setSize { get; set; }
         private int numOfBitsForIndex { get; set; }
-
         public int indexBitAmount { get; set; }
+        public int lastAddress { get; set; }
+        public int lastIndex { get; set; }
+
+        int[] test = new int[] { 6, 4, 0, 6, 2, 0, 0, 6, 0 };
+        int wewew = 0;
 
 
         /**
@@ -51,25 +59,41 @@ namespace MemoryHierarchySimulator
 
             TLB = new int[numOfLines];
             tlbIndex = new int[numOfLines];
-            for (int x = 0; x < TLB.Length; x++)
+            lru = new LRU[indexSize];
+            //set up TLB
+            for (int x = 0; x < tlbIndex.Length; x++)
             {
                 tlbIndex[x] = -1;
             }
 
-   
+            for (int x = 0; x < indexSize; x++)
+            {
+                lru[x] = new LRU();
+            }
+
+
 
 
 
         }
+
+        public TlbHit updateTLB(int address)
+        {
+            findTLBVariables(address);
+            TlbHit hit = findInTlb();
+            updateTlbTag(address);
+            return hit;
+
+        }
+        /// <summary>Updates the TLB.</summary>
+       
         public void updateTlbTag(int physicalAddress)
         {
-            	//Can be reused for the TL
-			
             TLB[index + indexSize * memoryKicked] = physicalAddress;
-			
             tlbIndex[index + indexSize * memoryKicked] = tag;
+            lru[index % indexSize].ComputeAddress(address);
         }
-
+        /// <summary>Finds whether the instruction hit or missed in the TLB.</summary>
         public TlbHit findInTlb()
         {
             for (int x = index; x < TLB.Length; x = x + indexSize)
@@ -78,7 +102,7 @@ namespace MemoryHierarchySimulator
                 {
                     index = x;
                     memoryKicked = 0;
-                    return TlbHit.MISSED;
+                    return TlbHit.MISS;
                 }
                 else if (tlbIndex[x] != tag)
                 {
@@ -88,10 +112,11 @@ namespace MemoryHierarchySimulator
                 {
                     index = x;
                     memoryKicked = 0;
+                    lru[index % indexSize].ComputeAddress(address);
                     return TlbHit.HIT;
                 }
             }
-            findRandomOffset();
+            findLRU();
             return TlbHit.CONF;
 
 
@@ -99,13 +124,13 @@ namespace MemoryHierarchySimulator
 
         public void findTLBVariables(int inst)
         {
-            int address = inst;
+            address = inst;
             index = address & indexMask;
             address = address >> indexBitAmount;
             tag = address;
         }
-
-        public void clearCache()
+        /// <summary>Clears the TLB.</summary>
+        public void clearTLB()
         {
             for (int x = 0; x < TLB.Length; x++)
             {
@@ -114,7 +139,7 @@ namespace MemoryHierarchySimulator
             }
             memoryKicked = 0;
         }
-
+        /// <summary>Finds the random offset for the eviction policy.</summary>
         public void findRandomOffset()
         {
             switch (numOfLines)
@@ -128,8 +153,32 @@ namespace MemoryHierarchySimulator
                     break;
             }
         }
-    }   
+
+        public void findLRU()
+        {
+
+            if (setSize == 1)
+            {
+                memoryKicked = 0;
+                lastAddress = lru[index].GetLRU();
+            }
+            else
+            {
+                lastAddress = lru[index % indexSize].GetLRU();
+                int lastTag = lastAddress >> (indexBitAmount);
+                //int lastTag = test[wewew];
+                //wewew++;
+                for (int x = 0; x < setSize; x++)
+                {
+                    if (tlbIndex[index + indexSize * x] == lastTag) 
+                    {
+                        memoryKicked = x;
+                        lastIndex = index + indexSize * x;
+                    }
+                }
+            }
+        }
 
 
-
+    }
 }
