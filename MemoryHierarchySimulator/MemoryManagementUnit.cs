@@ -399,6 +399,43 @@ Skip:
             config.Save(ConfigurationSaveMode.Modified, true);
         }
 
+        public static void checkConfig()
+        {
+            // The DTLB may range from direct mapped to fully associative(and any set associative in-between)
+            // The DTLB has a maximum of 64 entries
+
+            // The L1 DC is direct mapped or set associative—with a maximum set associativity of 8
+            // The L1 DC has a maximum of 128 entries
+            // The L1 DC has a minimum line size of 8 bytes
+            // Will probably apply to L2 as well
+
+            ConfigurationManager.AppSettings.Get("DC Number of sets");
+            ConfigurationManager.AppSettings.Get("DC Number of sets");
+            ConfigurationManager.AppSettings.Get("DC Set size");
+            ConfigurationManager.AppSettings.Get("DC Line size");
+            
+            ConfigurationManager.AppSettings.Get("DC Index Bits");
+            ConfigurationManager.AppSettings.Get("DC Offset Bits");
+
+            ConfigurationManager.AppSettings.Get("L2 Number of sets");
+            ConfigurationManager.AppSettings.Get("L2 Set size");
+            ConfigurationManager.AppSettings.Get("L2 Line size");
+            
+            ConfigurationManager.AppSettings.Get("L2 Index Bits");
+            ConfigurationManager.AppSettings.Get("L2 Offset Bits");
+
+            // The maximum number of virtual pages is 8192
+            // The maximum number of physical pages is 2048
+            // A page has a maximum size of 4 KiB = 4096 Bytes
+            ConfigurationManager.AppSettings.Get("PT Number of virtual pages");
+            ConfigurationManager.AppSettings.Get("PT Number of physical pages");
+            ConfigurationManager.AppSettings.Get("PT Page Size");
+            
+
+            // The number of sets, line size, and entries in the caches, the number of virtual pages, and the number of
+            // physical pages must be a power of 2
+        }
+
 
         /// <summary>Gets all the addresses from an inputted file</summary>
         /// <returns>String Array with addresses</returns>
