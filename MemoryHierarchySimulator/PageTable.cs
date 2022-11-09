@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,29 +20,33 @@ namespace MemoryHierarchySimulator
         int Hits = 0;
         int Misses = 0;
 
-        public PageTable(int NumVirtPages, int NumPhysPages, int PageSize)
+        /// <summary>Creates page table and presets all of the pages options. Uses config settings to set the number of
+        /// virtual and physical pages.</summary>
+        public PageTable()
         {
-            PT = new PageTableEntry[NumVirtPages];
-            FT = new FrameTable(NumPhysPages);
+            PT = new PageTableEntry[Int32.Parse(ConfigurationManager.AppSettings.Get("PT Number of virtual pages"))];
+            FT = new FrameTable(Int32.Parse(ConfigurationManager.AppSettings.Get("PT Number of physical pages")));
 
             for(int i = 0; i < PT.Length; i++)  // create all pages, setting each to invalid
             {
                 PT[i] = new PageTableEntry();
             }
-            
         }
 
-        public void ProcessMemoryReference(string Reference)
+        /// <summary>Determines if the PFN at a given VPN is valid</summary>
+        /// <returns>bool - true if valid, false if not</returns>
+        public bool PFNPresentAndValid(long VPN)
         {
-            string AccessType = Reference.Substring(0, 1);
+            if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
+                return true;
+            else
+                return false;
         }
 
-        //public PageTableEntry PassToTLB()
-        //{
-
-        //}
-
-        public int GetPFN(int VPN)
+        /// <summary>Will return the PFN for a given VPN. If PFN at the VPN is empty or invalid, LRU algorithm is called 
+        /// from Frame table class that get the next available PFN.</summary>
+        /// <returns>Page Frame Number</returns>
+        public int GetPFN(long VPN)
         {
             if (PT[VPN].PFN != -1 && PT[VPN].ValidBit)
             {
@@ -56,12 +61,14 @@ namespace MemoryHierarchySimulator
                 PT[VPN].ValidBit = true;
 
                 InvalidateEntries(PT[VPN].PFN);
+                PT[VPN].ValidBit = true;            // invalidate will mark all as false, so reset the current one back to true
 
                 return PT[VPN].PFN;
             }
                 
         }
 
+        /// <summary>Takes given PFN integer and invalidates all instances of that PFN</summary>
         public void InvalidateEntries(int PFN)
         {
             foreach(var entry in PT)

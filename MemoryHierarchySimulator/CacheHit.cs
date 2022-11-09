@@ -10,6 +10,7 @@ namespace MemoryHierarchySimulator
     {
         HIT,
         CONF,
-        MISSED
+        MISS,
+        BYPASS
     }
 }
