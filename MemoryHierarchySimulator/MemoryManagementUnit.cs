@@ -75,10 +75,10 @@ namespace MemoryHierarchySimulator
                 IsolateVPNAndOffset(address[1]);
 
                 
-                /*
+                
                 //TLB checks to see if the physical address exists
                                                                         //if statement here to see if tlb is disabled or not
-                Dtlb = tlb.updateTLB(test[x]);
+                Dtlb = tlb.updateTLB(VIRTpageNumber);
 
                 switch (Dtlb)
                 {
@@ -99,7 +99,7 @@ namespace MemoryHierarchySimulator
                 }
                
 
-                */
+                
 
                 
 
@@ -118,11 +118,11 @@ namespace MemoryHierarchySimulator
                     PTresult = "MISS";
                     physicalPageNum = pt.GetPFN(VIRTpageNumber);
                 }
-
+            Skip:
                 // build new virt address with PFN + offset
                 virtAddress = int.Parse(physicalPageNum.ToString() + pageOffset.ToString());
 
-Skip:
+
                 //TLB Update regardless
                 TLBresult = Dtlb.ToString();
                 TLBindex = tlb.index;

@@ -82,3 +82,7 @@ C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHiera
 C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Release\net6.0\MemoryHierarchySimulator.pdb
 C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Release\net6.0\MemoryHierarchySimulator.genruntimeconfig.cache
 C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Release\net6.0\ref\MemoryHierarchySimulator.dll
+C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Release\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Release\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Release\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\kfarm\OneDrive\Desktop\Fall2022\O.S\memorysim\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Release\net6.0\Microsoft.IdentityModel.Tokens.dll

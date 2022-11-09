@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
+    "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
+    "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "projectUniqueName": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
         "projectName": "MemoryHierarchySimulator",
-        "projectPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
-        "packagesPath": "C:\\Users\\janin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
+        "projectPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "packagesPath": "C:\\Users\\kfarm\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\janin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\kfarm\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -65,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
