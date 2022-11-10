@@ -31,6 +31,7 @@ namespace MemoryHierarchySimulator
             //Will hold the addresses from the inputted files
             string[] addressLines;
             string[] address;
+            string pageOffsetHex = "";
             DataCache dc = new DataCache("L1");
             DataCache l2 = new DataCache("L2");
             DTLB tlb = new DTLB();
@@ -84,6 +85,7 @@ namespace MemoryHierarchySimulator
                 {
                     case TlbHit.HIT:
                         TLBhit++;
+                        physicalPageNum = tlb.returnPPN();
                         //TLB HIT, Skip PageTable
                         goto Skip;
                         
@@ -118,9 +120,15 @@ namespace MemoryHierarchySimulator
                     PTresult = "MISS";
                     physicalPageNum = pt.GetPFN(VIRTpageNumber);
                 }
+                tlb.updateTlbTag(physicalPageNum);
             Skip:
                 // build new virt address with PFN + offset
-                virtAddress = int.Parse(physicalPageNum.ToString() + pageOffset.ToString());
+                pageOffsetHex = pageOffset.ToString("X");
+                if(pageOffsetHex.Length == 1)
+                {
+                    pageOffsetHex = "0" + pageOffset;
+                }
+                virtAddress = int.Parse(physicalPageNum.ToString() + pageOffsetHex, System.Globalization.NumberStyles.HexNumber);
 
 
                 //TLB Update regardless
@@ -291,7 +299,7 @@ namespace MemoryHierarchySimulator
             Console.WriteLine("D-cache contains {0} sets.", ConfigurationManager.AppSettings.Get("DC Number of sets"));
             Console.WriteLine("Each set contains {0} entries.", ConfigurationManager.AppSettings.Get("DC Set size"));
             Console.WriteLine("Each line is {0} bytes.", ConfigurationManager.AppSettings.Get("DC Line size"));
-            if (ConfigurationManager.AppSettings.Get("DC Write through/no write allocate") == "n")
+            if (ConfigurationManager.AppSettings.Get("DC Write through/no write allocate").ToString() == "n")
                 Console.WriteLine("The cache uses a write-allocate and write-back policy.");
             else
                 Console.WriteLine("The cache uses a write-allocate and no write-back policy.");

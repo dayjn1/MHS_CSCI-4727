@@ -81,7 +81,7 @@ namespace MemoryHierarchySimulator
         {
             findTLBVariables(address);
             TlbHit hit = findInTlb();
-            updateTlbTag(address);
+            //updateTlbTag(address);
             return hit;
 
         }
@@ -122,12 +122,17 @@ namespace MemoryHierarchySimulator
 
         }
 
+        public int returnPPN()
+        {
+            return TLB[index];
+        }
+
         public void findTLBVariables(int inst)
         {
             address = inst;
-            index = address & indexMask;
-            address = address >> indexBitAmount;
-            tag = address;
+            index = inst & indexMask;
+            inst = inst >> indexBitAmount;
+            tag = inst;
         }
         /// <summary>Clears the TLB.</summary>
         public void clearTLB()
