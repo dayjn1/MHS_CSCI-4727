@@ -26,6 +26,7 @@ namespace MemoryHierarchySimulator
         public static int L2Offset = 0;
         public static int TLBhit, TLBmiss, PThit, PTmiss, DChit, DCmiss, L2hit, L2miss,
             reads, writes, MMrefs, DiskRefs, PTrefs, MemRefLength;
+        public static int IndexBits;
         public static void Main(String[] args)
         {
             //Will hold the addresses from the inputted files
@@ -46,6 +47,7 @@ namespace MemoryHierarchySimulator
 
 
             //int that will hold the addresses int
+
             int virtAddress;
             int physAddress = 0;
             int physicalPageNum = 0;
@@ -123,13 +125,7 @@ namespace MemoryHierarchySimulator
                 tlb.updateTlbTag(physicalPageNum);
             Skip:
                 // build new virt address with PFN + offset
-                pageOffsetHex = pageOffset.ToString("X");
-                if(pageOffsetHex.Length == 1)
-                {
-                    pageOffsetHex = "0" + pageOffset;
-                }
-                virtAddress = int.Parse(physicalPageNum.ToString() + pageOffsetHex, System.Globalization.NumberStyles.HexNumber);
-
+                virtAddress = (physicalPageNum << IndexBits) + pageOffset;
 
                 //TLB Update regardless
                 TLBresult = Dtlb.ToString();
@@ -261,7 +257,7 @@ namespace MemoryHierarchySimulator
 
                 Console.WriteLine("{0,8} {1,6} {2,4} {3,6} {4,3} {5,4} {6,4} {7,4} {8,6} {9,3} {10,4} {11,6} {12,3} {13,4}", 
                     address[1].PadLeft(8, '0'), VIRTpageNumber.ToString("X").PadLeft(6), pageOffset.ToString("X").PadLeft(4), 
-                    TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag, DCindex, 
+                    TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag.ToString("X"), DCindex, 
                     DCresult, L2tag, L2Index, L2result);
 
             }
@@ -481,7 +477,7 @@ namespace MemoryHierarchySimulator
         public static void IsolateVPNAndOffset(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
-            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
+            IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
 
             char[] MaskBuilder = new char[VPNBits + IndexBits];
             long memRef = Convert.ToInt64(MemoryReference, 16);
