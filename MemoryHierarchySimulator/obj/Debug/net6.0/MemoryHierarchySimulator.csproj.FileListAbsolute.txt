@@ -118,3 +118,7 @@ C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug
 C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.pdb
 C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\MemoryHierarchySimulator.genruntimeconfig.cache
 C:\Users\cocar\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\obj\Debug\net6.0\ref\MemoryHierarchySimulator.dll
+C:\Users\cocar\Documents\GitHub\BucHunt\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\cocar\Documents\GitHub\BucHunt\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\cocar\Documents\GitHub\BucHunt\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\cocar\Documents\GitHub\BucHunt\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "BDM/GwrZ4k4QE0NgEd98ybijVPjwupBXANt3OmfxedxjKjzqxBDS8GM7w2OcWLcTGiBnxFh7LoMC0Pf4+4wd7w==",
+  "dgSpecHash": "09R2tNRkbmHCnsA5UFJYvoKooonl5e4eTooUGsUC0AuNTvClM2AL3VFPq7uXCtgphYE3YvHkXhqwJKqvaelHwQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\cocar\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+  "projectFilePath": "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\cocar\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\cocar\\.nuget\\packages\\microsoft.identitymodel.abstractions\\6.24.0\\microsoft.identitymodel.abstractions.6.24.0.nupkg.sha512",

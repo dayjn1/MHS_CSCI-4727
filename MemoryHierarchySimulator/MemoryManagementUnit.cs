@@ -163,25 +163,7 @@ namespace MemoryHierarchySimulator
                     DCtag = dc.tag;
 
                     //Updates variables for the console
-                    L2result = l2Cache.ToString();
-                    L2Index = l2.index % l2.indexSize;
-                    L2tag = l2.tag;
-                    switch (l2Cache)
-                    {
-                        case CacheHit.HIT:
-                            L2hit++;
-                            break;
-                        case CacheHit.CONF:
-                        case CacheHit.MISS:
-                            MMrefs++;
-                            L2miss++;
-                            break;
-                        default:
-                            L2result = "";
-                            L2Index = 0;
-                            L2tag = 0;
-                            break;
-                    }
+                    L2result = l2MemoryReference(l2, l2Cache);
                 }
                 else
                 {
@@ -234,25 +216,7 @@ namespace MemoryHierarchySimulator
                     DCtag = dc.tag;
 
                     //Gets the variables to print out to the console
-                    L2result = l2Cache.ToString();
-                    L2Index = l2.index % l2.indexSize;
-                    L2tag = l2.tag;
-                    switch (l2Cache)
-                    {
-                        case CacheHit.HIT:
-                            L2hit++;
-                            break;
-                        case CacheHit.CONF:
-                        case CacheHit.MISS:
-                            MMrefs++;
-                            L2miss++;
-                            break;
-                        default:
-                            L2result = "";
-                            L2Index = 0;
-                            L2tag = 0;
-                            break;
-                    }
+                    L2result = l2MemoryReference(l2, l2Cache);
                 }
 
                 Console.WriteLine("{0,8} {1,6} {2,4} {3,6} {4,3} {5,4} {6,4} {7,4} {8,6} {9,3} {10,4} {11,6} {12,3} {13,4}", 
@@ -268,6 +232,31 @@ namespace MemoryHierarchySimulator
 
             DisplayFinalStats();
 
+        }
+        //Gets the L2 reference
+        private static string l2MemoryReference(DataCache l2, CacheHit l2Cache)
+        {
+            string L2result = l2Cache.ToString();
+            L2Index = l2.index % l2.indexSize;
+            L2tag = l2.tag;
+            switch (l2Cache)
+            {
+                case CacheHit.HIT:
+                    L2hit++;
+                    break;
+                case CacheHit.CONF:
+                case CacheHit.MISS:
+                    MMrefs++;
+                    L2miss++;
+                    break;
+                default:
+                    L2result = "";
+                    L2Index = 0;
+                    L2tag = 0;
+                    break;
+            }
+
+            return L2result;
         }
 
         private static void writeCache()
