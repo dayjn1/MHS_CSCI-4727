@@ -101,15 +101,16 @@ namespace MemoryHierarchySimulator
                         //TLB MISS, Access PageTable
                         break;
                 }
-               
 
-                
 
-                
+
+
+
 
                 //PageTable finds the physical address for the virtual address
 
                 //PT HIT, return the physical page number
+                PTrefs++;
                 if (pt.PFNPresentAndValid(VIRTpageNumber))
                 {
                     PThit++;
@@ -247,6 +248,7 @@ namespace MemoryHierarchySimulator
                 case CacheHit.CONF:
                 case CacheHit.MISS:
                     MMrefs++;
+                    DiskRefs++;
                     L2miss++;
                     break;
                 default:
