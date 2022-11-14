@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
+    "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
+    "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "projectUniqueName": "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
         "projectName": "MemoryHierarchySimulator",
-        "projectPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
-        "packagesPath": "C:\\Users\\kfarm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
+        "projectPath": "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+        "packagesPath": "C:\\Users\\cocar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\cocar\\Documents\\GitHub\\BucHunt\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kfarm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cocar\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,8 +55,7 @@
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
@@ -65,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
