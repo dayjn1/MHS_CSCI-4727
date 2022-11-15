@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using System.Drawing;
 using Microsoft.IdentityModel.Protocols;
 using System.Runtime.CompilerServices;
+using NLog.Internal;
 
 namespace MemoryHierarchySimulator
 {

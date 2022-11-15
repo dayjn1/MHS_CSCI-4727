@@ -86,3 +86,4 @@ C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug
 C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
 C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\janin\Documents\GitHub\MHS_CSCI-4727\MemoryHierarchySimulator\bin\Debug\net6.0\NLog.dll

@@ -37,3 +37,9 @@ MemoryHierarchySimulator/obj/Debug/net6.0/MemoryHierarchySimulator.dll
 MemoryHierarchySimulator/obj/Debug/net6.0/MemoryHierarchySimulator.pdb
 MemoryHierarchySimulator/obj/Debug/net6.0/ref/MemoryHierarchySimulator.dll
 MemoryHierarchySimulator/obj/Debug/net6.0/refint/MemoryHierarchySimulator.dll
+*.v2
+*.json
+*.dll
+*.pdb
+*.props
+*.cache

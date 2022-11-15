@@ -97,6 +97,19 @@
           }
         }
       },
+      "NLog/5.0.5": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NLog.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "System.Configuration.ConfigurationManager/6.0.1": {
         "type": "package",
         "dependencies": {
@@ -433,6 +446,30 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "NLog/5.0.5": {
+      "sha512": "NOTWSyUEljmjMq7OqZ1X9iu4bJ+rW/o6pt79Jq8j2Q7s8DyoMMCJwe0HoCKcNjhYRJ++b+E8erH6E6WwaCTshQ==",
+      "type": "package",
+      "path": "nlog/5.0.5",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "N.png",
+        "lib/net35/NLog.dll",
+        "lib/net35/NLog.xml",
+        "lib/net45/NLog.dll",
+        "lib/net45/NLog.xml",
+        "lib/net46/NLog.dll",
+        "lib/net46/NLog.xml",
+        "lib/netstandard1.3/NLog.dll",
+        "lib/netstandard1.3/NLog.xml",
+        "lib/netstandard1.5/NLog.dll",
+        "lib/netstandard1.5/NLog.xml",
+        "lib/netstandard2.0/NLog.dll",
+        "lib/netstandard2.0/NLog.xml",
+        "nlog.5.0.5.nupkg.sha512",
+        "nlog.nuspec"
+      ]
+    },
     "System.Configuration.ConfigurationManager/6.0.1": {
       "sha512": "jXw9MlUu/kRfEU0WyTptAVueupqIeE3/rl0EZDMlf8pcvJnitQ8HeVEp69rZdaStXwTV72boi/Bhw8lOeO+U2w==",
       "type": "package",
@@ -680,23 +717,24 @@
   "projectFileDependencyGroups": {
     "net6.0": [
       "Microsoft.IdentityModel.Protocols >= 6.24.0",
+      "NLog >= 5.0.5",
       "System.Configuration.ConfigurationManager >= 6.0.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kfarm\\.nuget\\packages\\": {}
+    "C:\\Users\\janin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+      "projectUniqueName": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
       "projectName": "MemoryHierarchySimulator",
-      "projectPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
-      "packagesPath": "C:\\Users\\kfarm\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kfarm\\OneDrive\\Desktop\\Fall2022\\O.S\\memorysim\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
+      "projectPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\MemoryHierarchySimulator.csproj",
+      "packagesPath": "C:\\Users\\janin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\janin\\Documents\\GitHub\\MHS_CSCI-4727\\MemoryHierarchySimulator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\kfarm\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\janin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -726,6 +764,10 @@
             "target": "Package",
             "version": "[6.24.0, )"
           },
+          "NLog": {
+            "target": "Package",
+            "version": "[5.0.5, )"
+          },
           "System.Configuration.ConfigurationManager": {
             "target": "Package",
             "version": "[6.0.1, )"
@@ -747,7 +789,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
       }
     }
   }
