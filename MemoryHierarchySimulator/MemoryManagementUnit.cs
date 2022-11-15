@@ -27,11 +27,13 @@ namespace MemoryHierarchySimulator
         public static int L2Offset = 0;
         public static int TLBhit, TLBmiss, PThit, PTmiss, DChit, DCmiss, L2hit, L2miss,
             reads, writes, MMrefs, DiskRefs, PTrefs, MemRefLength;
+        public static int IndexBits;
         public static void Main(String[] args)
         {
             //Will hold the addresses from the inputted files
             string[] addressLines;
             string[] address;
+            string pageOffsetHex = "";
             DataCache dc = new DataCache("L1");
             DataCache l2 = new DataCache("L2");
             DTLB tlb = new DTLB();
@@ -46,6 +48,7 @@ namespace MemoryHierarchySimulator
 
 
             //int that will hold the addresses int
+
             int virtAddress;
             int physAddress = 0;
             int physicalPageNum = 0;
@@ -85,6 +88,7 @@ namespace MemoryHierarchySimulator
                 {
                     case TlbHit.HIT:
                         TLBhit++;
+                        physicalPageNum = tlb.returnPPN();
                         //TLB HIT, Skip PageTable
                         goto Skip;
                         
@@ -98,15 +102,16 @@ namespace MemoryHierarchySimulator
                         //TLB MISS, Access PageTable
                         break;
                 }
-               
 
-                
 
-                
+
+
+
 
                 //PageTable finds the physical address for the virtual address
 
                 //PT HIT, return the physical page number
+                PTrefs++;
                 if (pt.PFNPresentAndValid(VIRTpageNumber))
                 {
                     PThit++;
@@ -119,10 +124,10 @@ namespace MemoryHierarchySimulator
                     PTresult = "MISS";
                     physicalPageNum = pt.GetPFN(VIRTpageNumber);
                 }
+                tlb.updateTlbTag(physicalPageNum);
             Skip:
                 // build new virt address with PFN + offset
-                virtAddress = int.Parse(physicalPageNum.ToString() + pageOffset.ToString());
-
+                virtAddress = (physicalPageNum << IndexBits) + pageOffset;
 
                 //TLB Update regardless
                 TLBresult = Dtlb.ToString();
@@ -160,25 +165,7 @@ namespace MemoryHierarchySimulator
                     DCtag = dc.tag;
 
                     //Updates variables for the console
-                    L2result = l2Cache.ToString();
-                    L2Index = l2.index % l2.indexSize;
-                    L2tag = l2.tag;
-                    switch (l2Cache)
-                    {
-                        case CacheHit.HIT:
-                            L2hit++;
-                            break;
-                        case CacheHit.CONF:
-                        case CacheHit.MISS:
-                            MMrefs++;
-                            L2miss++;
-                            break;
-                        default:
-                            L2result = "";
-                            L2Index = 0;
-                            L2tag = 0;
-                            break;
-                    }
+                    L2result = l2MemoryReference(l2, l2Cache);
                 }
                 else
                 {
@@ -231,30 +218,12 @@ namespace MemoryHierarchySimulator
                     DCtag = dc.tag;
 
                     //Gets the variables to print out to the console
-                    L2result = l2Cache.ToString();
-                    L2Index = l2.index % l2.indexSize;
-                    L2tag = l2.tag;
-                    switch (l2Cache)
-                    {
-                        case CacheHit.HIT:
-                            L2hit++;
-                            break;
-                        case CacheHit.CONF:
-                        case CacheHit.MISS:
-                            MMrefs++;
-                            L2miss++;
-                            break;
-                        default:
-                            L2result = "";
-                            L2Index = 0;
-                            L2tag = 0;
-                            break;
-                    }
+                    L2result = l2MemoryReference(l2, l2Cache);
                 }
 
                 Console.WriteLine("{0,8} {1,6} {2,4} {3,6} {4,3} {5,4} {6,4} {7,4} {8,6} {9,3} {10,4} {11,6} {12,3} {13,4}", 
                     address[1].PadLeft(8, '0'), VIRTpageNumber.ToString("X").PadLeft(6), pageOffset.ToString("X").PadLeft(4), 
-                    TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag, DCindex, 
+                    TLBtag, TLBindex, TLBresult, PTresult, physicalPageNum, DCtag.ToString("X"), DCindex, 
                     DCresult, L2tag, L2Index, L2result);
 
             }
@@ -265,6 +234,32 @@ namespace MemoryHierarchySimulator
 
             DisplayFinalStats();
 
+        }
+        //Gets the L2 reference
+        private static string l2MemoryReference(DataCache l2, CacheHit l2Cache)
+        {
+            string L2result = l2Cache.ToString();
+            L2Index = l2.index % l2.indexSize;
+            L2tag = l2.tag;
+            switch (l2Cache)
+            {
+                case CacheHit.HIT:
+                    L2hit++;
+                    break;
+                case CacheHit.CONF:
+                case CacheHit.MISS:
+                    MMrefs++;
+                    DiskRefs++;
+                    L2miss++;
+                    break;
+                default:
+                    L2result = "";
+                    L2Index = 0;
+                    L2tag = 0;
+                    break;
+            }
+
+            return L2result;
         }
 
         private static void writeCache()
@@ -292,7 +287,7 @@ namespace MemoryHierarchySimulator
             Console.WriteLine("D-cache contains {0} sets.", ConfigurationManager.AppSettings.Get("DC Number of sets"));
             Console.WriteLine("Each set contains {0} entries.", ConfigurationManager.AppSettings.Get("DC Set size"));
             Console.WriteLine("Each line is {0} bytes.", ConfigurationManager.AppSettings.Get("DC Line size"));
-            if (ConfigurationManager.AppSettings.Get("DC Write through/no write allocate") == "n")
+            if (ConfigurationManager.AppSettings.Get("DC Write through/no write allocate").ToString() == "n")
                 Console.WriteLine("The cache uses a write-allocate and write-back policy.");
             else
                 Console.WriteLine("The cache uses a write-allocate and no write-back policy.");
@@ -474,7 +469,7 @@ namespace MemoryHierarchySimulator
         public static void IsolateVPNAndOffset(string MemoryReference)
         {
             int VPNBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Table Index Bits"));
-            int IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
+            IndexBits = Int32.Parse(ConfigurationManager.AppSettings.Get("Page Offset Bits"));
 
             char[] MaskBuilder = new char[VPNBits + IndexBits];
             long memRef = Convert.ToInt64(MemoryReference, 16);
